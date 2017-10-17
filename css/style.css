@@ -1,0 +1,22 @@
+div{
+    border: 0px red solid;
+}
+
+body {
+
+}
+
+.clear{
+    clear: both;
+}
+
+.red{
+    color: red;
+}
+.form-group{
+    height: 35px;
+}
+
+.form-group input{
+    width: 50%;
+}

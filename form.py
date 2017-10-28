@@ -13,10 +13,6 @@ text2 = form.getfirst("param1", "не задано")
 text3 = "123"
 
 print("Contenr-type:text/html\n\n")
-print("<html>")
-print("<head>")
-print("</head>")
-print("<body>")
 
 print("Hello CGI \n")
 print(text1 + "\n")
@@ -51,6 +47,3 @@ for vendor in root.findall('vendor'):
 ET.ElementTree(new).write('/var/www/html/parse_erc/new.xml')
 
 print('=== New XML Created ===')
-
-print("</body>")
-print("</html>")

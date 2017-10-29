@@ -5,20 +5,18 @@ import xml.etree.cElementTree as ET
 #import xml.dom.minidom as MN
 #from xml.etree import cElementTree
 
-
+print("Contenr-type:text/html\n\n")
 
 form = cgi.FieldStorage()
 text1 = form.getfirst("currency", "не задано")
 text2 = form.getfirst("param1", "не задано")
 text3 = "123"
 
-print("Contenr-type:text/html\n\n")
-
 print("Hello CGI \n")
 print(text1 + "\n")
 print(text2 + "\n")
 
-fileXML = '/var/www/html/parse_erc/erc_selected_vendors_20171017_04h25m.xml'
+fileXML = '/var/www/parse_erc/erc_selected_vendors_20171017_04h25m.xml'
 
 elem = ET.parse(fileXML)
 root = elem.getroot()

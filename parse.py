@@ -17,7 +17,7 @@ for vendor in root.findall('vendor'):
     for good in goods:
         print(good[2].text + ' code = ' + good[3].text + '<br>')
 
-        price_text = good[5].text + " === " + str(round(float(good[5].text) * 1.134, 2))
+        price_text = good[5].text + " == " + str(round(float(good[5].text) * 1.134, 2))
 
         item = ET.SubElement(new, 'item')
         title = ET.SubElement(item, 'title')
@@ -28,6 +28,12 @@ for vendor in root.findall('vendor'):
         category.text = good[1].text
         price = ET.SubElement(item, 'price')
         price.text = price_text
+        param1 = ET.SubElement(item, 'param')
+        param1.set('name', 'высота')
+        param1.text = good[19].text
+        param2 = ET.SubElement(item, 'param')
+        param2.set('name', 'ширина')
+        param2.text = good[18].text
 
 ET.ElementTree(new).write('/var/www/html/parse_erc/new.xml')
 

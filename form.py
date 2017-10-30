@@ -41,6 +41,12 @@ for vendor in root.findall('vendor'):
         price.text = str(round(float(good[7].text) * 1.025, 2))
         price_r = ET.SubElement(item, 'price_r')
         price_r.text = str(round(float(good[5].text) * 1.075, 2))
+        param1 = ET.SubElement(item, 'param')
+        param1.set('name', 'высота')
+        param1.text = good[19].text
+        param2 = ET.SubElement(item, 'param')
+        param2.set('name', 'ширина')
+        param2.text = good[18].text
 
 ET.ElementTree(new).write('/var/www/html/parse_erc/new.xml')
 

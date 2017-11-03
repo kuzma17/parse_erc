@@ -1,20 +1,39 @@
 #!/usr/bin/env python3
+import MySQLdb
 import cgi
 import os
 import xml.etree.cElementTree as ET
-#import xml.dom.minidom as MN
-#from xml.etree import cElementTree
 
-print("Contenr-type:text/html\n\n")
+print("Content-type:text/html\n\n")
+print("""<html>
+    <head>
+    </head>
+    <body>""")
+
+db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_erc", charset='utf8', use_unicode=False)
+cursor = db.cursor()
+
+sql = "SELECT * FROM erc_categories"
+cursor.execute(sql)
+results = cursor.fetchall()
+
+for row in results:
+    id = row[0]
+    title_erc = row[1]
+    id_cat = row[2]
+    print(title_erc + id_cat)
+    print("<br>")
+
+db.close()
 
 form = cgi.FieldStorage()
 text1 = form.getfirst("currency", "не задано")
 text2 = form.getfirst("param1", "не задано")
 text3 = "123"
 
-print("Hello CGI \n")
-print(text1 + "\n")
-print(text2 + "\n")
+print("<strong>Hello CGI </strong><br>")
+print(text1 + "<br>")
+print(text2 + "<br>")
 
 fileXML = '/var/www/parse_erc/erc_selected_vendors_20171017_04h25m.xml'
 
@@ -48,6 +67,9 @@ for vendor in root.findall('vendor'):
         param2.set('name', 'ширина')
         param2.text = good[18].text
 
-ET.ElementTree(new).write('/var/www/html/parse_erc/new.xml')
+ET.ElementTree(new).write('/var/www/parse_erc/new.xml')
 
 print('=== New XML Created ===')
+
+print("""</body>
+</html>""")

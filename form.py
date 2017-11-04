@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import MySQLdb
+import pymysql
 import cgi
 import os
 import xml.etree.cElementTree as ET
@@ -10,19 +10,29 @@ print("""<html>
     </head>
     <body>""")
 
-db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_erc", charset='utf8', use_unicode=False)
+db = pymysql.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_erc", charset='utf8', use_unicode=False)
 cursor = db.cursor()
 
-sql = "SELECT * FROM erc_categories"
-cursor.execute(sql)
-results = cursor.fetchall()
 
-for row in results:
-    id = row[0]
-    title_erc = row[1]
-    id_cat = row[2]
-    print(title_erc + id_cat)
-    print("<br>")
+def category(title_erc):
+    sql = "SELECT category_id, category_title FROM erc_categories WHERE title_erc = %s"
+    cursor.execute(sql, title_erc)
+    return cursor.fetchone()
+
+
+results = category('Багатофункційні лазерні пристрої')
+print('category: ')
+print(results[0])
+print(' ')
+print(results[1])
+print('<br>')
+
+#for row in results:
+ #   id = row[0]
+ #   title_erc = row[1]
+ #   id_cat = row[2]
+ #   print(title_erc + id_cat)
+ #   print("<br>")
 
 db.close()
 

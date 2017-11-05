@@ -22,9 +22,10 @@ def category(title_erc):
 
 results = category('Багатофункційні лазерні пристрої')
 print('category: ')
-print(results[0])
+print(str(results[0], 'utf-8'))
 print(' ')
-print(results[1])
+print(str(results[1]))
+
 print('<br>')
 
 #for row in results:

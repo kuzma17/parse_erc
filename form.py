@@ -15,11 +15,21 @@ db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_e
 cursor = db.cursor()
 
 
-def category(category, sub_category, vendor):
-    cat = sub_category
-    #sql = "SELECT category_id, category_title FROM erc_categories WHERE title_erc = %s"
-    #cursor.execute(sql, [title_erc])
-    return str('TR432432')
+def catalogs():
+    sql = "SELECT * FROM erc_prom_categories"
+    cursor.execute(sql)
+    return cursor.fetchall()
+
+
+def categories(category, sub_category, vendor):
+    sql = "SELECT pc.code FROM erc_prom_categories AS pc " \
+          "LEFT JOIN erc_categories AS ct ON ct.id = pc.category_id " \
+          "LEFT JOIN erc_sub_categories AS sc ON sc.id = pc.sub_category_id " \
+          "LEFT JOIN erc_vendor AS v ON v.id = pc.vendor_id " \
+          "WHERE ct.name = %s AND sc.name = %s AND v.name = %s"
+    cursor.execute(sql, [category, sub_category, vendor])
+    return str(cursor.fetchone()[0])
+
 
 def prices(ddp, par, sprice, rprice, curr):
     sql = "SELECT a.value FROM erc_arguments AS a LEFT JOIN erc_categories AS ct ON ct.id = a.category_id  WHERE ct.name = %s"
@@ -66,6 +76,13 @@ currency = ET.SubElement(new, 'currency')
 currency.set('code', 'USD')
 currency.text = '7.00'
 catalog = ET.SubElement(new, 'catalog')
+for cat in catalogs():
+    category = ET.SubElement(catalog, 'category')
+    category.set('id', cat[4])
+    if cat[5] != 0:
+        category.set('parentId', cat[5])
+
+    category.text = cat[6]
 
 items = ET.SubElement(new, 'items')
 
@@ -73,14 +90,14 @@ for vendor in root.findall('vendor'):
     goods = vendor.findall('goods')
     vendor_name = vendor.get('name')
     for good in goods:
-        #print(good[2].text + ' code = ' + good[3].text + '<br>')
+        # print(good[2].text + ' code = ' + good[3].text + '<br>')
 
         item = ET.SubElement(items, 'item')
         item.set('id', str(good[3].text))
         title = ET.SubElement(item, 'name')
         title.text = good[2].text
         categoryId = ET.SubElement(item, 'categoryId')
-        categoryId.text = category(good[0].text, good[1].text, vendor_name)
+        categoryId.text = categories(good[0].text, good[1].text, vendor_name)
         price = ET.SubElement(item, 'price')
         price.text = prices(good[8].text, good[0].text, good[7].text, good[5].text, text1)
         image = ET.SubElement(item, 'image')
@@ -89,8 +106,8 @@ for vendor in root.findall('vendor'):
         vendor.text = vendor_name
         description = ET.SubElement(item, 'description')
         description.text = str(good[26].text)
-        #if good[27].text:
-         #   description.text += str(good[27].text)
+        # if good[27].text:
+        #   description.text += str(good[27].text)
         warranty = ET.SubElement(item, 'warranty')
         warranty.text = good[9].text
 
@@ -121,7 +138,6 @@ for vendor in root.findall('vendor'):
             param_volume = ET.SubElement(item, 'param')
             param_volume.set('name', 'объем')
             param_volume.text = good[22].text
-
 
 db.close()
 ET.ElementTree(new).write('/var/www/parse_erc/new.xml')

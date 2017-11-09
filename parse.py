@@ -27,18 +27,36 @@ def add_category(cat):
         db.commit()
 
 
-new = ET.Element('new_xml')
+#new = ET.Element('new_xml')
 
-for vendor in root.findall('vendor'):
+#for vendor in root.findall('vendor'):
     #name = vendor.get('name')
     #print(name)
-    goods = vendor.findall('goods')
-    for good in goods:
-        print(good[0].text)
+ #   goods = vendor.findall('goods')
+  #  for good in goods:
+   #     print(good[0].text)
         #add_category(good[1].text)
+
+def id_catt(catt):
+    sql = "SELECT id FROM erc_prom_categories WHERE sub_category = %s"
+    cursor1.execute(sql, [catt])
+    return cursor1.fetchall()
+
+
+sql = "SELECT * FROM erc_prom_categories"
+cursor.execute(sql)
+row = cursor.fetchall()
+
+for r in row:
+    catt = r[4]
+    print(catt)
+
+    #id_cat = id_catt(catt)
+    #print(id_cat)
+
 
 
 
 print('End parse.')
-
+db.commit()
 db.close()

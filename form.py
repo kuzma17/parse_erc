@@ -22,23 +22,19 @@ def category(category, sub_category, vendor):
     return str('TR432432')
 
 def prices(ddp, par, sprice, rprice, curr):
-
     sql = "SELECT a.value FROM erc_arguments AS a LEFT JOIN erc_categories AS ct ON ct.id = a.category_id  WHERE ct.name = %s"
     cursor.execute(sql, [par])
     parr = cursor.fetchone()[0]
-
     ddp = int(ddp)
     param = float(parr)
     sprice = float(sprice)
     rprice = float(rprice)
     curr = float(curr)
-
     if ddp == 0:
         currency = curr
     else:
         currency = 1
-
-    price = round(sprice * currency * param, 2)
+    price = round(sprice * currency * param, 0)
     price_res = max(price, rprice)
     return str(price_res)
 
@@ -86,7 +82,7 @@ for vendor in root.findall('vendor'):
         categoryId = ET.SubElement(item, 'categoryId')
         categoryId.text = category(good[0].text, good[1].text, vendor_name)
         price = ET.SubElement(item, 'price')
-        price.text = prices(good[8].text, good[0].text, good[7].text, good[5].text, 1.27)
+        price.text = prices(good[8].text, good[0].text, good[7].text, good[5].text, text1)
         image = ET.SubElement(item, 'image')
         image.text = 'http://www.erc.ua/i/goods/' + good[3].text + '.jpg'
         vendor = ET.SubElement(item, 'vendor')

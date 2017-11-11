@@ -189,7 +189,7 @@ for vendor in root.findall('vendor'):
 
 db.commit()
 db.close()
-ET.ElementTree(new).write('/var/www/parse_erc/new.xml')
+ET.ElementTree(new).write('/var/www/parse_erc/new.xml', 'utf-8', True)
 
 print('=== New XML Created ===')
 

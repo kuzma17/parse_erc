@@ -18,49 +18,63 @@ db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_e
 cursor = db.cursor()
 cursor1 = db.cursor()
 
-
-
 def catalogs():
     sql = "SELECT * FROM erc_prom_categories"
     cursor.execute(sql)
     return cursor.fetchall()
 
 
-def categories(catt, sub_category, vendor):
-    #cat = str(category, 'utf-8')
-    #print(catt + sub_category + vendor)
-    #print('<br>')
+def categories(category, sub_category, vendor):
+    #print(category + ',' + sub_category + ',' + vendor)
 
     sql = "SELECT pc.code FROM erc_prom_categories AS pc " \
           "LEFT JOIN erc_categories AS ct ON ct.id = pc.category_id " \
           "LEFT JOIN erc_sub_categories AS sc ON sc.id = pc.sub_category_id " \
           "LEFT JOIN erc_vendors AS v ON v.id = pc.vendor_id " \
-          "WHERE ct.name = %s AND sc.name = %s LIMIT 1"
-    #cursor.execute(sql, (catt, sub_category))
+          "WHERE ct.name = %s AND sc.name = %s AND v.name = %s LIMIT 1"
+    #cursor.execute(sql, [category, sub_category, vendor])
+    #cursor.execute(sql, [category, sub_category, vendor])
+    #cursor.execute(sql)
+
+
+   # print((str(cursor.fetchone()[0], 'utf-8')))
+    #return (str(cursor.fetchone()[0], 'utf-8'))
+
+    # save only is not the data
+    sql = "insert into erc_codes (category,sub_category, vendor) " \
+          "select %s, %s, %s from dual " \
+          "where not exists(select * from erc_codes " \
+          "where category = %s and sub_category = %s AND vendor = %s)"
+    #cursor.execute(sql, [category, sub_category, vendor, category, sub_category, vendor])
+
+    sql = "SELECT id FROM erc_codes WHERE category = %s and sub_category = %s AND vendor = %s"
+    cursor.execute(sql, [category, sub_category, vendor])
+    id_code = str(cursor.fetchone()[0])
+    print(id_code)
 
     sql = "SELECT id FROM erc_categories WHERE name = %s"
-    cursor.execute(sql, [catt])
-    category_id = str(cursor.fetchone()[0])
+    cursor.execute(sql, [category])
+    id_category = str(cursor.fetchone()[0])
+    #print(id_category)
 
     sql = "SELECT id FROM erc_sub_categories WHERE name = %s"
     cursor.execute(sql, [sub_category])
-    sub_category_id = str(cursor.fetchone()[0])
+    id_sub_category = str(cursor.fetchone()[0])
+    #print(id_sub_category)
 
     sql = "SELECT id FROM erc_vendors WHERE name = %s"
     cursor.execute(sql, [vendor])
-    vendor_id = str(cursor.fetchone()[0])
+    id_vendor = str(cursor.fetchone()[0])
+    #print(id_vendor)
 
-    #print(category_id + sub_category_id + vendor_id)
+    sql = "UPDATE erc_codes SET category_id = %s, sub_category_id = %s, vendor_id = %s WHERE id = %s"
+    #cursor.execute(sql, [id_category, id_sub_category, id_vendor, id_code])
 
-    sql = "SELECT code FROM erc_prom_categories WHERE category_id = %s LIMIT 1"
-    cursor.execute(sql, [category_id])
-    print(str(cursor.fetchone()))
-    #category_id = str(cursor.fetchone()[0])
 
-    #print(str(cursor.fetchone()[0], 'utf-8'))
 
-    #return str(cursor.fetchone()[0], 'utf-8')
-    return str('TR432432')
+
+
+
 
 def prices(ddp, par, sprice, rprice, curr):
     sql = "SELECT a.value FROM erc_arguments AS a LEFT JOIN erc_categories AS ct ON ct.id = a.category_id  WHERE ct.name = %s"
@@ -94,6 +108,8 @@ print(text2 + "<br>")
 
 fileXML = '/var/www/parse_erc/erc_selected_vendors_20171107_08h29m.xml'
 
+#xmlp = ET.XMLParser(encoding="utf-8")
+#elem = ET.parse(fileXML, xmlp)
 elem = ET.parse(fileXML)
 root = elem.getroot()
 print(root)
@@ -109,10 +125,10 @@ currency.text = '7.00'
 catalog = ET.SubElement(new, 'catalog')
 for cat in catalogs():
     category = ET.SubElement(catalog, 'category')
-    category.set('id', str(cat[6], 'utf-8'))
-    if str(cat[7], 'utf-8'):
-        category.set('parentId', str(cat[7], 'utf-8'))
-    category.text = str(cat[8], 'utf-8')
+    category.set('id', str(cat[4], 'utf-8'))
+    if str(cat[5], 'utf-8'):
+        category.set('parentId', str(cat[5], 'utf-8'))
+    category.text = str(cat[6], 'utf-8')
 
 items = ET.SubElement(new, 'items')
 
@@ -171,7 +187,7 @@ for vendor in root.findall('vendor'):
             param_volume.set('name', 'объем')
             param_volume.text = good[22].text
 
-
+db.commit()
 db.close()
 ET.ElementTree(new).write('/var/www/parse_erc/new.xml')
 

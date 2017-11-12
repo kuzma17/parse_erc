@@ -6,13 +6,13 @@ import os
 import xml.etree.cElementTree as ET
 import time
 
+download_patch = '/var/www/parse_erc/download_file/'
+
 print("Content-type:text/html\n\n")
 print("""<html>
     <head>
     </head>
     <body>""")
-
-
 
 db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_erc", charset='utf8', use_unicode=False)
 cursor = db.cursor()
@@ -50,7 +50,7 @@ def categories(category, sub_category, vendor):
     sql = "SELECT id FROM erc_codes WHERE category = %s and sub_category = %s AND vendor = %s"
     cursor.execute(sql, [category, sub_category, vendor])
     id_code = str(cursor.fetchone()[0])
-    print(id_code)
+    #print(id_code)
 
     sql = "SELECT id FROM erc_categories WHERE name = %s"
     cursor.execute(sql, [category])
@@ -69,10 +69,6 @@ def categories(category, sub_category, vendor):
 
     sql = "UPDATE erc_codes SET category_id = %s, sub_category_id = %s, vendor_id = %s WHERE id = %s"
     #cursor.execute(sql, [id_category, id_sub_category, id_vendor, id_code])
-
-
-
-
 
 
 
@@ -106,7 +102,13 @@ print("<strong>Hello CGI </strong><br>")
 print(text1 + "<br>")
 print(text2 + "<br>")
 
-fileXML = '/var/www/parse_erc/erc_selected_vendors_20171107_08h29m.xml'
+fl = form['file_erc']
+fn = os.path.basename(fl.filename)
+open(download_patch + fn, 'wb').write(fl.file.read())
+
+fileXML = download_patch + fn
+
+#fileXML = '/var/www/parse_erc/erc_selected_vendors_20171107_08h29m.xml'
 
 #xmlp = ET.XMLParser(encoding="utf-8")
 #elem = ET.parse(fileXML, xmlp)

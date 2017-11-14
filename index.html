@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label  class="col-md-3 control-label"></label>
                     <div class="col-md-9">
-                         <input type="submit" value="Parse">
+                         <input type="submit" value="Parse" id="submit">
                     </div>
                 </div>
             </form>
@@ -56,13 +56,41 @@
 </div>
 <script type="text/javascript">
             $(document).ready(function(){
+                //$('#myForm').submit(function(event){
+                  //  $.post("/cgi-bin/test.py",{
+                  //      currency:$("#currency").val(),
+                  //      file_erc: $("#file_erc").val()
+                 //   },onResponse);
+                 //   return false;
+               // });
+               // function onResponse(data){
+              //      $("#in2").text(data);
+             //   }
+
                 $('#myForm').submit(function(event){
-                    $.post("/cgi-bin/test.py",{currency:$("#currency").val()},onResponse);
+                     var file_data = $('#file_erc').prop('files')[0];
+
+                    var fd = new FormData();
+
+                    //console.log(this.files);
+
+                    fd.append('file', file_data);
+
+                     $.ajax({
+                        url: "/cgi-bin/test.py",
+                        type: "POST",
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            //$("#in2").append(data);
+                            alert(data);
+                        }
+                    });
+
                     return false;
+
                 });
-                function onResponse(data){
-                    $("#in2").text(data);
-                }
             });
 </script>
 

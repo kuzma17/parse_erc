@@ -13,6 +13,8 @@ print("""<html>
     </head>
     <body>""")
 
+
+
 db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_erc", charset='utf8', use_unicode=False)
 cursor = db.cursor()
 cursor1 = db.cursor()
@@ -28,17 +30,18 @@ def catalogs():
 def categories(category, sub_category, vendor):
     #print(category + ',' + sub_category + ',' + vendor)
 
-    sql = "SELECT pc.code FROM erc_prom_categories AS pc " \
+    sql = "SELECT pc.code FROM erc_codes AS pc " \
           "LEFT JOIN erc_categories AS ct ON ct.id = pc.category_id " \
           "LEFT JOIN erc_sub_categories AS sc ON sc.id = pc.sub_category_id " \
           "LEFT JOIN erc_vendors AS v ON v.id = pc.vendor_id " \
           "WHERE ct.name = %s AND sc.name = %s AND v.name = %s LIMIT 1"
-    #cursor.execute(sql, [category, sub_category, vendor])
+    cursor.execute(sql, [category, sub_category, vendor])
     #cursor.execute(sql, [category, sub_category, vendor])
     #cursor.execute(sql)
 
 
-   # print((str(cursor.fetchone()[0], 'utf-8')))
+    print((str(cursor.fetchone()[1])))
+    print('<br>')
     #return (str(cursor.fetchone()[0], 'utf-8'))
 
     # save only is not the data
@@ -103,7 +106,7 @@ print("<strong>Hello CGI </strong><br>")
 print(text1 + "<br>")
 print(text2 + "<br>")
 
-fl = form['file_erc']
+fl = form['file']
 fn = os.path.basename(fl.filename)
 open(download_patch + fn, 'wb').write(fl.file.read())
 

@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label  class="col-md-3 control-label">Выберите исходный файл<span class="red">*</span></label>
                     <div class="col-md-9" >
-                        <input type="file" name="file_erc" id="file_erc" accept=".xml,image/*"/>
+                        <input type="file" name="file" id="file" />
                     </div>
                 </div>
                  <div class="form-group">
@@ -45,53 +45,36 @@
                     <label  class="col-md-3 control-label"></label>
                     <div class="col-md-9">
                          <input type="submit" value="Parse" id="submit">
+                        <button id="upload-file-btn" type="button" class="btn btn-primary" data-dismiss="modal" value="Upload">Upload</button>
                     </div>
                 </div>
             </form>
             <hr>
-            <div id="in2">43234</div>
+            <div id="info"></div>
 
         </div>
     </div>
 </div>
 <script type="text/javascript">
-            $(document).ready(function(){
-                //$('#myForm').submit(function(event){
-                  //  $.post("/cgi-bin/test.py",{
-                  //      currency:$("#currency").val(),
-                  //      file_erc: $("#file_erc").val()
-                 //   },onResponse);
-                 //   return false;
-               // });
-               // function onResponse(data){
-              //      $("#in2").text(data);
-             //   }
-
-                $('#myForm').submit(function(event){
-                     var file_data = $('#file_erc').prop('files')[0];
-
-                    var fd = new FormData();
-
-                    //console.log(this.files);
-
-                    fd.append('file', file_data);
-
-                     $.ajax({
-                        url: "/cgi-bin/test.py",
-                        type: "POST",
-                        data: fd,
-                        processData: false,
+           $(function() {
+               $('#upload-file-btn').click(function() {
+                   var form_data = new FormData($('#myForm')[0]);
+                   $.ajax({
+                       type: 'POST',
+                        url: '/cgi-bin/test.py',
+                        data: form_data,
                         contentType: false,
-                        success: function (data) {
-                            //$("#in2").append(data);
-                            alert(data);
-                        }
-                    });
-
-                    return false;
-
-                });
-            });
+                        cache: false,
+                        processData: false,
+                        async: false,
+                       success: function(data) {
+                           //console.log('Success!');
+                           $('#info').html('=== File is upload ===');
+                           alert(data);
+                       }
+                   });
+               });
+           });
 </script>
 
 </body>

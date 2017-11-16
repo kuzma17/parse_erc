@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <meta charset="utf-8">
-    <link href="css/style.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css" >
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link href="/css/style.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" >
+    <link rel="stylesheet" href=/"css/font-awesome.min.css">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
 </head>
 <body style="background-color: #e0ebeb;">
@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label  class="col-md-3 control-label">Выберите исходный файл<span class="red">*</span></label>
                     <div class="col-md-9" >
-                        <input type="file" name="file" id="file" />
+                        <input type="file" name="file_erc" id="file" />
                     </div>
                 </div>
                  <div class="form-group">
@@ -50,6 +50,7 @@
                 </div>
             </form>
             <hr>
+            <div id="preloader" style="width: 100px; margin: 0 auto; display: none"><img src="/img/325.gif" alt=""/></div>
             <div id="info"></div>
 
         </div>
@@ -58,22 +59,33 @@
 <script type="text/javascript">
            $(function() {
                $('#upload-file-btn').click(function() {
+                   $('#preloader').show();
                    var form_data = new FormData($('#myForm')[0]);
                    $.ajax({
                        type: 'POST',
-                        url: '/cgi-bin/test.py',
+                        url: '/cgi-bin/readxml.py',
                         data: form_data,
                         contentType: false,
                         cache: false,
                         processData: false,
                         async: false,
                        success: function(data) {
+                           $('#preloader').hide();
                            //console.log('Success!');
-                           $('#info').html('=== File is upload ===');
-                           alert(data);
+                           $('#info').html(data);
+                           //alert(data);
                        }
                    });
                });
+
+               $('#info').on("mouseover", ".code_prom", function(){
+                   $(this).css({marginTop: '1px'});
+                   $(this).children("span").css({fontSize: '12px'});
+               })
+               $('#info').on("mouseout", ".code_prom", function(){
+                   $(this).css({marginTop: '-1px'});
+                   $(this).children("span").css({fontSize: '8px'});
+               })
            });
 </script>
 

@@ -17,7 +17,7 @@ print("""<html>
 
 sql = "SELECT name FROM erc_sub_categories WHERE id = 2"
 cursor.execute(sql)
-name = cursor.fetchone()[0].decode()
+name = cursor.fetchone()[0]
 print(name)
 print('<br>')
 

@@ -22,14 +22,13 @@ cursor = db.cursor()
 cursor1 = db.cursor()
 
 def code_prom(category, sub_category, vendor):
-    sql = "SELECT pc.code FROM erc_codes AS pc " \
+    sql = "SELECT pc.code, pc.status FROM erc_codes AS pc " \
           "LEFT JOIN erc_categories AS ct ON ct.id = pc.category_id " \
           "LEFT JOIN erc_sub_categories AS sc ON sc.id = pc.sub_category_id " \
           "LEFT JOIN erc_vendors AS v ON v.id = pc.vendor_id " \
           "WHERE ct.name = %s AND sc.name = %s AND v.name = %s LIMIT 1"
     cursor.execute(sql, [category, sub_category, vendor])
-    code = cursor.fetchone()[0].decode()
-
+    code = cursor.fetchone()
     return code
 
 
@@ -55,9 +54,14 @@ for vendor in root.findall('vendor'):
 
             code = code_prom(good[0].text, good[1].text, vendor_name)
 
-            if code:
+            if code[0]:
                 print('<div class="code_prom" style="color:green; font-family: Geneva, Arial, Helvetica, sans-serif; font-size: 11px; cursor: pointer">')
-                print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>', good[2].text, ' <span class="label label-success" >', code, '</span>')
+                print('<input style="position:absolute; left:-7px; margin-top: 0" type="checkbox"')
+                if int(code[1]) == 1:
+                    print(' checked="checked"')
+
+                print(' >')
+                print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>', good[2].text, ' <span class="label label-success" >', code[0].decode(), '</span>')
             else:
                 print('<div style="color:red; font-family: Geneva, Arial, Helvetica, sans-serif; font-size: 11px">')
                 print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>', good[2].text, ' <input type="text" name="code["' + good[3].text + '"]">')

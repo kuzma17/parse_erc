@@ -15,10 +15,10 @@ print("""<html>
     </head>
     <body>""")
 
-sql = "SELECT name FROM erc_sub_categories WHERE id = 2"
+sql = "SELECT id, name FROM erc_sub_categories WHERE id = 2"
 cursor.execute(sql)
-name = cursor.fetchone()[0]
-print(name)
+name = cursor.fetchone()
+print(name[1])
 print('<br>')
 
 print("""</body

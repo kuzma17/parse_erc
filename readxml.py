@@ -21,7 +21,7 @@ cursor1 = db.cursor()
 
 
 def code_prom(category, sub_category, vendor):
-    sql = "SELECT pc.code, pc.status FROM erc_codes AS pc " \
+    sql = "SELECT pc.id, pc.code, pc.status FROM erc_codes AS pc " \
           "LEFT JOIN erc_categories AS ct ON ct.id = pc.category_id " \
           "LEFT JOIN erc_sub_categories AS sc ON sc.id = pc.sub_category_id " \
           "LEFT JOIN erc_vendors AS v ON v.id = pc.vendor_id " \
@@ -41,7 +41,7 @@ print('Content-Type: text/plain')
 print('')
 
 tmp_list = []
-
+i = 0
 print('<form method="post" name="category_save" id="category_save" action="/cgi-bin/category_save.py" >')
 for vendor in root.findall('vendor'):
     goods = vendor.findall('goods')
@@ -54,24 +54,30 @@ for vendor in root.findall('vendor'):
 
             code = code_prom(good[0].text, good[1].text, vendor_name)
 
-            if code[0]:
+            if code[1]:
                 print(
                     '<div class="code_prom" style="color:green; font-family: Geneva, Arial, Helvetica, sans-serif; font-size: 11px; cursor: pointer">')
-                print(
-                    '<input name="status" style="position:absolute; left:-7px; margin-top: 0" type="checkbox" value="' + str(
-                        int(code[0])) + '=' + str(int(code[1])) + '"')
-                if int(code[1]) == 1:
+                print('<input name="status[' + str(
+                    int(code[0])) + ']" style="position:absolute; left:-7px; margin-top: 0" type="checkbox" ')
+                if int(code[2]) == 1:
                     print(' checked="checked"')
 
                 print(' >')
-                print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>', good[2].text,
-                      ' <span class="label label-success" >', code[0].decode(), '</span>')
+                print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>', ' <span class="label label-success" >',
+                      code[1].decode(), '</span>')
+                print('<input type="hidden" name="category" value="' + str(int(code[0])) + '" >')
 
             else:
                 print('<div style="color:red; font-family: Geneva, Arial, Helvetica, sans-serif; font-size: 11px">')
-                print('<input name="status" style="position:absolute; left:-7px; margin-top: 0" type="checkbox" >')
-                print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>', good[2].text,
-                      ' <input type="text" name="code["' + good[3].text + '"]">')
+                print('<input name="add_status[' + str(
+                    i) + ']" style="position:absolute; left:-7px; margin-top: 0" type="checkbox" >')
+                print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>',
+                      ' <input type="text" name="add_code[' + str(i) + ']">')
+                print('<input type="hidden" name="new_category" value="' + str(i) + '" >')
+                print('<input type="hidden" name="add_vendor" value="' + vendor_name + '" >')
+                print('<input type="hidden" name="add_category" value="' + good[0].text + '" >')
+                print('<input type="hidden" name="add_subcategory" value="' + good[1].text + '" >')
+                i = int(i) + 1
 
             print('</div>')
 

@@ -20,3 +20,17 @@ body {
 .form-group input{
     width: 50%;
 }
+
+.code_prom{
+    font-family: Geneva, Arial, Helvetica, sans-serif; font-size: 11px; cursor: pointer
+}
+
+.green{
+    color: green;
+}
+.yellow{
+    color: yellow;
+}
+.red{
+    color: red;
+}

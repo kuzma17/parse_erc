@@ -53,7 +53,7 @@ for vendor in root.findall('vendor'):
     vendor_name = vendor.get('name')
     for good in goods:
         item_prom = erc.code_prom(good[0].text, good[1].text, vendor_name)
-        if item_prom[2] == 1 and item_prom[1]:
+        if item_prom and item_prom[2] == 1 and item_prom[1]:
             item = ET.SubElement(items, 'item')
             item.set('id', str(good[3].text))
             title = ET.SubElement(item, 'name')

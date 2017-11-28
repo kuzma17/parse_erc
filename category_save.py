@@ -3,73 +3,23 @@
 import MySQLdb
 import cgi
 import os
+from function import ErcFunction
 import xml.etree.cElementTree as ET
-import time
 
-db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_erc", charset='utf8', use_unicode=False)
-cursor = db.cursor()
-
-def update_status(id, status):
-    if status == 'on':
-        status = 1
-    else:
-        status = 0
-
-    sql = "UPDATE erc_codes SET status = %s WHERE id = %s"
-    cursor.execute(sql, [status, id])
-
-def add_vendor(name):
-    try:
-        sql = "SELECT id FROM erc_vendors WHERE name = %s"
-        cursor.execute(sql, [name])
-        id = cursor.fetchone()[0]
-    except:
-        sql = "INSERT INTO erc_vendors SET name = %s"
-        cursor.execute(sql, [name])
-        id = cursor.lastrowid
-
-    return id
-
-def add_category(name):
-    try:
-        sql = "SELECT id FROM erc_categories WHERE name = %s"
-        cursor.execute(sql, [name])
-        id = cursor.fetchone()[0]
-    except:
-        sql = "INSERT INTO erc_categories SET name = %s"
-        cursor.execute(sql, [name])
-        id = cursor.lastrowid
-
-    return id
-
-def add_subcategory(name):
-    try:
-        sql = "SELECT id FROM erc_sub_categories WHERE name = %s"
-        cursor.execute(sql, [name])
-        id = cursor.fetchone()[0]
-    except:
-        sql = "INSERT INTO erc_sub_categories SET name = %s"
-        cursor.execute(sql, [name])
-        id = cursor.lastrowid
-
-    return id
-
-def add_code(vendor_id, category_id, subcategory_id, code, status='None'):
-    if status == 'on':
-        status = '1'
-    else:
-        status = '0'
-
-    sql = "INSERT INTO erc_codes (vendor_id, category_id, sub_category_id, code, status) VALUE(%s, %s, %s, %s, %s)"
-    cursor.execute(sql, [vendor_id, category_id, subcategory_id, code, status])
-
-
+erc = ErcFunction()
+erc.open()
 
 print("Content-type:text/html\n\n")
-print("""<html>
-    <head>
-    </head>
-    <body>""")
+print("""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="/css/style.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" >
+    <link rel="stylesheet" href=/"css/font-awesome.min.css">
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+</head>
+<body style="background-color: #e0ebeb;">""")
 print('<h2>save categories</h2>')
 
 form = cgi.FieldStorage()
@@ -88,7 +38,7 @@ for category in categories:
     status = form.getvalue('status['+category+']')
     print(status)
     print('<br>')
-    update_status(category, status)
+    erc.update_status(category, status)
 
 print('<hr>')
 
@@ -97,17 +47,17 @@ for new_id in new_categories:
     print(' => ')
     print(new_vendor[int(new_id)])
     print(' : ')
-    vendor_id = add_vendor(new_vendor[int(new_id)])
+    vendor_id = erc.add_vendor(new_vendor[int(new_id)])
     print(vendor_id)
     print(' => ')
     print(new_category[int(new_id)])
     print(' : ')
-    category_id = add_category(new_category[int(new_id)])
+    category_id = erc.add_category(new_category[int(new_id)])
     print(category_id)
     print(' => ')
     print(new_subcategory[int(new_id)])
     print(' : ')
-    subcategory_id = add_subcategory(new_subcategory[int(new_id)])
+    subcategory_id = erc.add_subcategory(new_subcategory[int(new_id)])
     print(subcategory_id)
     print(' => ')
     code = form.getvalue('add_code['+new_id+']')
@@ -118,13 +68,64 @@ for new_id in new_categories:
     print('<br>')
 
     if code:
-        add_code(vendor_id, category_id, subcategory_id, code, status)
+        erc.add_code(vendor_id, category_id, subcategory_id, code, status)
         print('Add str Code<br>')
 
+erc.save()
+erc.close()
+#
 
+filename = 'erc.xml'
+download_patch = '/var/www/parse_erc/download_file/'
 
-db.commit()
-db.close()
+fileXML = download_patch + filename
+elem = ET.parse(fileXML)
+root = elem.getroot()
+
+tmp_list = []
+i = 0
+print('<form method="post" name="create_xml" id="category_save" action="create_xml.py" >')
+for vendor in root.findall('vendor'):
+    goods = vendor.findall('goods')
+    vendor_name = vendor.get('name')
+    for good in goods:
+        if [vendor_name, good[0].text, good[1].text] in tmp_list:
+            continue
+        else:
+            tmp_list.append([vendor_name, good[0].text, good[1].text])
+
+            code = erc.code_prom(good[0].text, good[1].text, vendor_name)
+
+            if code and code[1]:
+                print(
+                    '<div class="code_prom green">')
+                print('<input name="status[' + str(
+                    int(code[0])) + ']" style="position:absolute; left:-7px; margin-top: 0" type="checkbox" ')
+                if int(code[2]) == 1:
+                    print(' checked="checked"')
+
+                print(' >')
+                print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>', ' <span class="label label-success" >',
+                      code[1].decode(), '</span>')
+                print('<input type="hidden" name="category" value="' + str(int(code[0])) + '" >')
+
+            else:
+                print('<div class="code_prom red">')
+                print('<input name="add_status[' + str(
+                    i) + ']" style="position:absolute; left:-7px; margin-top: 0" type="checkbox" >')
+                print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>',
+                      ' <input type="text" name="add_code[' + str(i) + ']">')
+                print('<input type="hidden" name="new_category" value="' + str(i) + '" >')
+                print('<input type="hidden" name="add_vendor" value="' + vendor_name + '" >')
+                print('<input type="hidden" name="add_category" value="' + good[0].text + '" >')
+                print('<input type="hidden" name="add_subcategory" value="' + good[1].text + '" >')
+                i = int(i) + 1
+
+            print('</div>')
+
+print('<button id="" type="submit" class="btn btn-primary" data-dismiss="modal" value="Save">Create XML</button>')
+print('</form>')
+
 
 print("""</body>
 </html>""")

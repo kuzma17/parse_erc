@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import MySQLdb
 import cgi
 import os
 from function import ErcFunction
@@ -23,7 +22,6 @@ print("""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3
 print('<h2>save categories</h2>')
 
 form = cgi.FieldStorage()
-#text1 = form.getfirst("currency", "не задано")
 
 categories = form.getlist("category")
 new_categories = form.getlist("new_category")

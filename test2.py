@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 import cgi
 import os
-import MySQLdb
+import pymysql
 
-db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_erc", charset='utf8', use_unicode=False)
+db = pymysql.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_erc", charset='utf8', use_unicode=False)
 cursor = db.cursor()
 
 def search_1(code):

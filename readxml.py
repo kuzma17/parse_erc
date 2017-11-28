@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import MySQLdb
 import cgi
 import os
 import xml.etree.cElementTree as ET

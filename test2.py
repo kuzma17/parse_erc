@@ -2,48 +2,80 @@
 # -*- coding: utf-8 -*-
 import cgi
 import os
-import pymysql
+import xml.etree.cElementTree as ET
+import time
+from function import ErcFunction
 
-db = pymysql.connect(host="127.0.0.1", user="root", passwd="170270", db="parse_erc", charset='utf8', use_unicode=False)
-cursor = db.cursor()
+erc = ErcFunction()
+erc.open()
 
-def search_1(code):
-    sql = "SELECT id FROM erc_codes WHERE code = %s"
-    cursor.execute(sql, [code])
-    a = cursor.fetchone()[0]
-    return a
-
-def add_title(id, parent_id):
-    sql = "UPDATE erc_codes SET padern_id = %s WHERE id = %s"
-    cursor.execute(sql, [parent_id, id])
+print('Status: 200 OK')
+print('Content-Type: text/plain')
+print('')
 
 
-print("Content-type:text/html\n\n")
-print("""<html>
-    <head>
-    </head>
-    <body>""")
-
-sql = "SELECT id, parent_code FROM erc_codes"
-cursor.execute(sql)
-arr = cursor.fetchall()
-
-for r in arr:
-    print(r[1])
-
-    if r[1] != 0:
-        parent_id = search_1(r[1])
-        print(parent_id)
-
-    #add_title(r[0].decode(), parent_id)
+filename = 'erc.xml'
+download_patch = '/var/www/parse_erc/download_file/'
 
 
 
+fileXML = download_patch + filename
+fileXML = '/var/www/parse_erc/erc_selected_vendors_20171107_08h29m.xml'
 
-db.commit()
-db.close()
-print("""</body
-</html>""")
+try:
+    elem = ET.parse(fileXML)
+    root = elem.getroot()
 
+    tmp_list = []
+    i = 0
+    print('<form method="post" name="category_save" id="category_save" action="category_save.py" >')
+    for vendor in root.findall('vendor'):
+        goods = vendor.findall('goods')
+        vendor_name = vendor.get('name')
+        for good in goods:
+            if [vendor_name, good[0].text, good[1].text] in tmp_list:
+                continue
+            else:
+                tmp_list.append([vendor_name, good[0].text, good[1].text])
 
+                code = erc.code_prom(good[0].text, good[1].text, vendor_name)
+
+                if code and code[1]:
+                    print(
+                        '<div class="code_prom green">')
+                    print('<input name="status[' + str(
+                        int(code[0])) + ']" style="position:absolute; left:-7px; margin-top: 0" type="checkbox" ')
+                    if int(code[2]) == 1:
+                        print(' checked="checked"')
+
+                    print(' >')
+                    print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>',
+                          ' <span class="label label-success" >',
+                          code[1].decode(), '</span>')
+                    print('<input type="hidden" name="category" value="' + str(int(code[0])) + '" >')
+
+                else:
+                    print('<div class="code_prom red">')
+                    print('<input name="add_status[' + str(
+                        i) + ']" style="position:absolute; left:-7px; margin-top: 0" type="checkbox" >')
+                    print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>',
+                          ' <input type="text" name="add_code[' + str(i) + ']">')
+                    print('<input type="hidden" name="new_category" value="' + str(i) + '" >')
+                    print('<input type="hidden" name="add_vendor" value="' + vendor_name + '" >')
+                    print('<input type="hidden" name="add_category" value="' + good[0].text + '" >')
+                    print('<input type="hidden" name="add_subcategory" value="' + good[1].text + '" >')
+                    i = int(i) + 1
+
+                print('</div>')
+
+    erc.close()
+
+    print(
+        '<button id="edit-param" type="button" class="btn btn-primary" data-dismiss="modal" value="Save">Save</button>')
+    print('</form>')
+
+    print(
+        '<button id="create_xml" type="button" class="btn btn-primary" data-dismiss="modal" value="Create">Create XML file</button>')
+except:
+    print('FILE ERROR!')
 

@@ -9,18 +9,9 @@ from function import ErcFunction
 erc = ErcFunction()
 erc.open()
 
-print("Content-type:text/html\n\n")
-print("""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <meta charset="utf-8">
-    <link href="/css/style.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="/css/bootstrap.min.css" >
-    <link rel="stylesheet" href=/"css/font-awesome.min.css">
-    <script type="text/javascript" src="/js/jquery.min.js"></script>
-</head>
-<body style="background-color: #e0ebeb;">""")
-print('<h2>Created erc xml</h2>')
+print('Status: 200 OK')
+print('Content-Type: text/plain')
+print('')
 
 filename = 'erc.xml'
 download_patch = '/var/www/parse_erc/download_file/'
@@ -107,7 +98,5 @@ erc.close()
 
 ET.ElementTree(new).write('/var/www/parse_erc/new.xml', 'utf-8', True)
 
-print('=== New XML Created ===')
-
-print("""</body>
-</html>""")
+print('<p>XML файл успешно сформирован</p>')
+print('<p><a href="http://www.parser-erc/new.xml" target="_blank">скачать</p>')

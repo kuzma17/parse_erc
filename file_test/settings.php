@@ -33,7 +33,7 @@ $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($lin
                     Категории
                 </div>
                 <div class="panel-body">
-                    Сиб категории
+                    Суб категории
                 </div>
                 <div class="panel-body">
                     Бренды

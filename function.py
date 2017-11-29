@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import pymysql
+import MySQLdb
 import cgi
 import os
 
@@ -16,10 +16,10 @@ class ErcFunction:
     def open(self):
         try:
             #con = MySQLdb.connect(self.__host, self.__user, self.__password, self.__database)
-            con = pymysql.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
+            con = MySQLdb.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
             self.__connection = con
             self.__session = con.cursor()
-        except pymysql.Error as e:
+        except MySQLdb.Error as e:
             print("Error %d: %s" % (e.args[0], e.args[1]))
 
     def save(self):
@@ -120,4 +120,18 @@ class ErcFunction:
         cat = self.__session.fetchall()
         return cat
 
+    def categories(self):
+        sql = "SELECT * FROM erc_categories"
+        self.__session.execute(sql)
+        categories = self.__session.fetchall()
+        return categories
 
+    def category(self, id):
+        sql = "SELECT * FROM erc_categories WHERE id = %s"
+        self.__session.execute(sql, [id])
+        category = self.__session.fetchone()
+        return category
+
+    def edit_category(self, id, name):
+        sql = "UPDATE erc_categories SET name = %s WHERE id = %s"
+        self.__session.execute(sql, [name, id])

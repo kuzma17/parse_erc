@@ -99,4 +99,4 @@ erc.close()
 ET.ElementTree(new).write('/var/www/parse_erc/new.xml', 'utf-8', True)
 
 print('<p>XML файл успешно сформирован</p>')
-print('<p><a href="http://www.parser-erc/new.xml" target="_blank">скачать</p>')
+print('<p><a href="http://www.parser-erc/new.xml" target="_blank"><span class="glyphicon glyphicon-save"></span> скачать</p>')

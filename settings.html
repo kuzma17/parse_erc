@@ -2,9 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link href="/css/style.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="/css/bootstrap.min.css" >
-    <link rel="stylesheet" href=/"css/font-awesome.min.css">
+    <script src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/jquery.min.js"></script>
 </head>
 <body style="background-color: #e0ebeb;">
@@ -57,7 +58,7 @@
         $('#info').on("click", ".edit_category", function(){
             $('#preloader').show();
             $("#info").hide();
-            $.post("edit_category.py",{data:$(this).attr('data-id')},onResponse);
+            $.post("view_category.py",{data:$(this).attr('data-id')},onResponse);
             return false;
         });
 
@@ -66,6 +67,24 @@
             $("#info").hide();
             $.post("save_category.py",{id_cat:$('#id_cat').val(), name_cat:$('#name_cat').val()},onResponse);
             return false;
+        });
+
+        $('#info').on("click", "#add_category", function(){
+            $('#preloader').show();
+            $("#info").hide();
+            $.post("view_category.py",{},onResponse);
+            return false;
+        });
+
+        $('#info').on("click", ".dell_category", function(){
+            if(confirm('Вы действительно хотите удалить объект?')) {
+                $('#preloader').show();
+                $("#info").hide();
+                $.post("dell_category.py", {data: $(this).attr('data-id')}, onResponse);
+                return false;
+            }else {
+                return false;
+            }
         });
 
         function onResponse(data){

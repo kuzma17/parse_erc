@@ -14,14 +14,17 @@ print('Status: 200 OK')
 print('Content-Type: text/plain')
 print('')
 
-print("""<table class="" cellpadding="1" cellspacing="1" border="1">
+print('<button id="add_category" type="button" class="btn btn-default">Добавить</button><br>')
+print("""<table class="table table-hover white_bg">
+            <thead>
                 <tr>
                     <th>id</th><th>name</th><th></th>
-                </tr>""")
+                </tr>
+            <thead>""")
 for category in categories:
     print('<tr>')
     print('<td>' + str(category[0]) + '</td>')
     print('<td>' + str(category[1].decode()) + '</td>')
-    print('<td><a class="edit_category" data-id="'+str(category[0])+'" href="#">edit</a> <a href="#">del</a></td>')
+    print('<td><a class="edit_category" data-id="'+str(category[0])+'" href="#"><span class="glyphicon glyphicon-edit green"></span></a> <a class="dell_category" data-id="'+str(category[0])+'" href="#"><span class="glyphicon glyphicon-remove red"></span></a></td>')
     print('</tr>')
 print('<table>')

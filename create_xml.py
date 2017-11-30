@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import cgi
-import os
 import xml.etree.cElementTree as ET
 import time
 from function import ErcFunction
@@ -32,10 +30,10 @@ currency.text = '7.00'
 catalog = ET.SubElement(new, 'catalog')
 for cat in erc.catalogs():
     category = ET.SubElement(catalog, 'category')
-    category.set('id', str(cat[8], 'utf-8'))
-    if cat[9]:
-        category.set('parentId', str(cat[9]))
-    category.text = str(cat[10], 'utf-8')
+    category.set('id', str(cat[4], 'utf-8'))
+    if cat[5]:
+        category.set('parentId', str(cat[5].decode()))
+    category.text = str(cat[6], 'utf-8')
 
 items = ET.SubElement(new, 'items')
 

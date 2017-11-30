@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import pymysql
+import MySQLdb
 import cgi
 import os
 
@@ -16,10 +16,10 @@ class ErcFunction:
     def open(self):
         try:
             #con = MySQLdb.connect(self.__host, self.__user, self.__password, self.__database)
-            con = pymysql.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
+            con = MySQLdb.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
             self.__connection = con
             self.__session = con.cursor()
-        except pymysql.Error as e:
+        except MySQLdb.Error as e:
             print("Error %d: %s" % (e.args[0], e.args[1]))
 
     def save(self):
@@ -120,22 +120,43 @@ class ErcFunction:
         cat = self.__session.fetchall()
         return cat
 
-    def categories(self):
-        sql = "SELECT * FROM erc_categories"
+    def cat_list(self, table):
+        sql = "SELECT * FROM "+table
         self.__session.execute(sql)
-        categories = self.__session.fetchall()
-        return categories
+        cat = self.__session.fetchall()
+        return cat
 
-    def category(self, id):
-        sql = "SELECT * FROM erc_categories WHERE id = %s"
+    def cat(self, table, id):
+        sql = "SELECT * FROM "+table+" WHERE id = %s"
         self.__session.execute(sql, [id])
-        category = self.__session.fetchone()
-        return category
+        cat = self.__session.fetchone()
+        return cat
 
-    def edit_category(self, id, name):
-        sql = "UPDATE erc_categories SET name = %s WHERE id = %s"
+    def cat_edit(self, table, id, name):
+        sql = "UPDATE "+table+" SET name = %s WHERE id = %s"
         self.__session.execute(sql, [name, id])
 
-    def dell_category(self, id):
-        sql = "DELETE FROM erc_categories WHERE id = %s"
+    def cat_dell(self, table, id):
+        sql = "DELETE FROM "+table+" WHERE id = %s"
         self.__session.execute(sql, [id])
+
+    def cat_add(self, table, name):
+        sql = "INSERT INTO "+table+" SET name = %s"
+        self.__session.execute(sql, [name])
+
+    def code_list(self):
+        sql = "SELECT pc.id, ct.name, sc.name, v.name, pc.code, pc.parent_code, pc.title, pc.status FROM erc_codes AS pc " \
+              "LEFT JOIN erc_categories AS ct ON ct.id = pc.category_id " \
+              "LEFT JOIN erc_sub_categories AS sc ON sc.id = pc.sub_category_id " \
+              "LEFT JOIN erc_vendors AS v ON v.id = pc.vendor_id "
+        self.__session.execute(sql)
+        codes = self.__session.fetchall()
+        return codes
+
+    def code_edit(self, category, subcategory, vendor, code, parent_code, title, status, id):
+        sql = "UPDATE erc_codes SET category_id = %s, sub_category_id = %s, vendor_id = %s, code = %s, parent_code = %s, title = %s, status = %s WHERE id = %s"
+        self.__session.execute(sql, [category, subcategory, vendor, code, parent_code, title, status, id])
+
+    def code_add(self, category, subcategory, vendor, code, parent_code, title, status):
+        sql = "INSERT INTO erc_codes SET category_id = %s, sub_category_id = %s, vendor_id = %s, code = %s, parent_code = %s, title = %s, status = %s"
+        self.__session.execute(sql, [category, subcategory, vendor, code, parent_code, title, status])

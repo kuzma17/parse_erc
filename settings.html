@@ -7,6 +7,7 @@
     <link href="/css/style.css" rel="stylesheet"/>
     <script src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/settings.js"></script>
 </head>
 <body style="background-color: #e0ebeb;">
 <div class="container" >
@@ -23,16 +24,16 @@
                 <div class="panel-body">
                     Общие настройки
                 </div>
-                <div class="panel-body" id="categories">
+                <div class="panel-body" id="category">
                     Категории
                 </div>
-                <div class="panel-body" id="subcategories">
+                <div class="panel-body" id="subcategory">
                     Сиб категории
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="vendor">
                     Бренды
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="code">
                     Коды
                 </div>
             </div>
@@ -45,55 +46,6 @@
         </div>
     </div>
 </div>
-<script type="text/javascript ">
-    $(document).ready(function(){
 
-        $('#categories').click(function() {
-            $('#preloader').show();
-            $("#info").hide();
-            $.post("categories.py",{},onResponse);
-            return false;
-        });
-
-        $('#info').on("click", ".edit_category", function(){
-            $('#preloader').show();
-            $("#info").hide();
-            $.post("view_category.py",{data:$(this).attr('data-id')},onResponse);
-            return false;
-        });
-
-        $('#info').on("click", "#edit-submit", function(){
-            $('#preloader').show();
-            $("#info").hide();
-            $.post("save_category.py",{id_cat:$('#id_cat').val(), name_cat:$('#name_cat').val()},onResponse);
-            return false;
-        });
-
-        $('#info').on("click", "#add_category", function(){
-            $('#preloader').show();
-            $("#info").hide();
-            $.post("view_category.py",{},onResponse);
-            return false;
-        });
-
-        $('#info').on("click", ".dell_category", function(){
-            if(confirm('Вы действительно хотите удалить объект?')) {
-                $('#preloader').show();
-                $("#info").hide();
-                $.post("dell_category.py", {data: $(this).attr('data-id')}, onResponse);
-                return false;
-            }else {
-                return false;
-            }
-        });
-
-        function onResponse(data){
-            $('#preloader').hide();
-            $("#info").html(data);
-            $("#info").show(300);
-        }
-
-    });
-</script>
 </body>
 </html>

@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import cgi
-import os
 import xml.etree.cElementTree as ET
-import time
 from function import ErcFunction
 
 erc = ErcFunction()
@@ -29,43 +27,43 @@ else:
     new_category = form.getlist("add_category")
     new_subcategory = form.getlist("add_subcategory")
     for category in categories:
-        print(category)
-        print(' => ')
+        #print(category)
+        #print(' => ')
         status = form.getvalue('status[' + category + ']')
-        print(status)
-        print('<br>')
+        #print(status)
+        #print('<br>')
         erc.update_status(category, status)
 
     # print('<hr>')
 
     for new_id in new_categories:
-        print(new_id)
-        print(' => ')
-        print(new_vendor[int(new_id)])
-        print(' : ')
+        #print(new_id)
+        #print(' => ')
+        #print(new_vendor[int(new_id)])
+        #print(' : ')
         vendor_id = erc.add_vendor(new_vendor[int(new_id)])
-        print(vendor_id)
-        print(' => ')
-        print(new_category[int(new_id)])
-        print(' : ')
+        #print(vendor_id)
+        #print(' => ')
+        #print(new_category[int(new_id)])
+        #print(' : ')
         category_id = erc.add_category(new_category[int(new_id)])
-        print(category_id)
-        print(' => ')
-        print(new_subcategory[int(new_id)])
-        print(' : ')
+        #print(category_id)
+        #print(' => ')
+        #print(new_subcategory[int(new_id)])
+        #print(' : ')
         subcategory_id = erc.add_subcategory(new_subcategory[int(new_id)])
-        print(subcategory_id)
-        print(' => ')
+        #print(subcategory_id)
+        #print(' => ')
         code = form.getvalue('add_code[' + new_id + ']')
-        print(code)
-        print(' => ')
+        #print(code)
+        #print(' => ')
         status = form.getvalue('add_status[' + new_id + ']')
-        print(status)
-        print('<br>')
+        #print(status)
+        #print('<br>')
 
         if code:
             erc.add_code(vendor_id, category_id, subcategory_id, code, status)
-            print('Add str Code<br>')
+            #print('Add str Code<br>')
 
     erc.save()
 

@@ -80,7 +80,7 @@ def category_view(cat, title, id, name):
        </div>
        </form>""")
 
-def code_view(cat, title, categories, subcategories, vendors, id, code, parent_code, title_code, status):
+def code_view(cat, title, categories, subcategories, vendors, category_id, subcategory_id, vendor_id, id, code, parent_code, title_code, status):
     print('Status: 200 OK')
     print('Content-Type: text/plain')
     print('')
@@ -92,9 +92,13 @@ def code_view(cat, title, categories, subcategories, vendors, id, code, parent_c
     print("""<div class="form-group">
               <label for="name" class="control-label col-sm-2">Категория</label>
         	  <div class="col-sm-10">""")
+
     print('<select name="category" id="category" >')
     for category in categories:
-        print('<option value="' + str(category[0]) + '" >' + str(category[1].decode()) +'</option>')
+        print('<option value="' + str(category[0]) + '"')
+        if category_id and int(category_id) == int(category[0]):
+            print(' selected ')
+        print('>' + str(category[1].decode()) +'</option>')
     print('</select>')
     print("""</div>
                </div>
@@ -103,7 +107,10 @@ def code_view(cat, title, categories, subcategories, vendors, id, code, parent_c
         	  <div class="col-sm-10">""")
     print('<select name="subcategory" id="subcategory" >')
     for subcategory in subcategories:
-        print('<option value="' + str(subcategory[0]) + '" >' + str(subcategory[1].decode()) + '</option>')
+        print('<option value="' + str(subcategory[0]) + '"')
+        if subcategory_id and int(subcategory_id) == int(subcategory[0]):
+            print(' selected ')
+        print('>' + str(subcategory[1].decode()) + '</option>')
     print('</select>')
     print("""</div>
                    </div>
@@ -112,7 +119,10 @@ def code_view(cat, title, categories, subcategories, vendors, id, code, parent_c
             	  <div class="col-sm-10">""")
     print('<select name="vendor" id="vendor" >')
     for vendor in vendors:
-        print('<option value="' + str(vendor[0]) + '" >' + str(vendor[1].decode()) + '</option>')
+        print('<option value="' + str(vendor[0]) + '"')
+        if vendor_id and int(vendor_id) == int(vendor[0]):
+            print(' selected ')
+        print('>' + str(vendor[1].decode()) + '</option>')
     print('</select>')
     print("""</div>
                   </div>
@@ -137,7 +147,18 @@ def code_view(cat, title, categories, subcategories, vendors, id, code, parent_c
                      <div class="form-group">
                        <label for="name" class="control-label col-sm-2">Status</label>
                  	  <div class="col-sm-10">""")
-    print('<input type="text" name="status" id="status" value="' + status + '">')
+    print('<select name="status" id="status" >')
+    print('<option value="0"')
+    if int(status) == 0:
+        print(' selected ')
+
+    print('>OFF</option>')
+    print('<option value="1"')
+    if int(status) == 1:
+        print(' selected ')
+
+    print('>ON</option>')
+    print('</select>')
     print("""</div>
            </div>
            <div class="form-group">

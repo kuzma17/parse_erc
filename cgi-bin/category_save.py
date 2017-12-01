@@ -1,1 +1,0 @@
-/usr/lib/cgi-bin/category_save.py

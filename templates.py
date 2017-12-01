@@ -4,8 +4,8 @@ def category_list(cat, title, categories):
     print('Content-Type: text/plain')
     print('')
 
-    print('<h4>'+title+'</h4>')
-    print('<button id="add_cat" data-cat="' + cat + '" type="button" class="btn btn-default">Добавить</button><br>')
+    print('<strong class="title">'+title+'</strong>')
+    print('<button style="float:right; margin-top: -15px" id="add_cat" data-cat="' + cat + '" type="button" class="btn btn-default">Добавить</button>')
     print("""<table class="table table-hover white_bg">
                 <thead>
                     <tr>
@@ -16,8 +16,8 @@ def category_list(cat, title, categories):
         print('<tr>')
         print('<td>' + str(category[0]) + '</td>')
         print('<td>' + str(category[1].decode()) + '</td>')
-        print('<td><a class="edit_cat" data-id="' + str(category[0]) + '" data-cat="' + cat + '" href="#"><span class="glyphicon glyphicon-edit green"></span></a> ')
-        print('<a class="dell_cat" data-id="' + str(category[0]) + '"  data-cat="' + cat + '" href="#"><span class="glyphicon glyphicon-remove red"></span></a></td>')
+        print('<td><a title="редактировать" class="edit_cat" data-id="' + str(category[0]) + '" data-cat="' + cat + '" href="#"><span class="glyphicon glyphicon-edit green"></span></a> ')
+        print('<a title="удалить" class="dell_cat" data-id="' + str(category[0]) + '"  data-cat="' + cat + '" href="#"><span class="glyphicon glyphicon-remove red"></span></a></td>')
         print('</tr>')
     print('<table>')
 
@@ -26,8 +26,8 @@ def code_list(cat, title, codes):
     print('Content-Type: text/plain')
     print('')
 
-    print('<h4>'+title+'</h4>')
-    print('<button id="add_cat" data-cat="' + cat + '" type="button" class="btn btn-default">Добавить</button><br>')
+    print('<strong class="title">' + title + '</strong>')
+    print('<button style="float:right; margin-top: -15px" id="add_cat" data-cat="' + cat + '" type="button" class="btn btn-default">Добавить</button>')
     print("""<table class="table table-hover white_bg">
                 <thead>
                     <tr>
@@ -49,10 +49,30 @@ def code_list(cat, title, codes):
         print('<td>' + str(code[5].decode()) + '</td>')
         print('<td>' + str(code[6].decode()) + '</td>')
         print('<td>' + str(code[7]) + '</td>')
-        print('<td nowrap><a class="edit_cat" data-id="' + str(code[0]) + '" data-cat="' + cat + '" href="#"><span class="glyphicon glyphicon-edit green"></span></a> ')
-        print('<a class="dell_cat" data-id="' + str(code[0]) + '"  data-cat="' + cat + '" href="#"><span class="glyphicon glyphicon-remove red"></span></a></td>')
+        print('<td nowrap><a title="редактировать" class="edit_cat" data-id="' + str(code[0]) + '" data-cat="' + cat + '" href="#"><span class="glyphicon glyphicon-edit green"></span></a> ')
+        print('<a title="удалить" class="dell_cat" data-id="' + str(code[0]) + '"  data-cat="' + cat + '" href="#"><span class="glyphicon glyphicon-remove red"></span></a></td>')
         print('</tr>')
+    print('<table>')
 
+def option_list(cat, title, codes):
+    print('Status: 200 OK')
+    print('Content-Type: text/plain')
+    print('')
+
+    print('<strong class="title">' + title + '</strong>')
+    print("""<table class="table table-hover white_bg">
+                <thead>
+                    <tr>
+                        <th>Опция</th><th>значение</th></th>
+                    </tr>
+                <thead>""")
+    for code in codes:
+        print('<tr>')
+        print('<td>'+str(code[3].decode())+'</td>')
+        print('<td>' + str(code[2]) + '</td>')
+        print('<td nowrap><a title="редактировать" class="edit_cat" data-id="' + str(code[0]) + '" data-cat="' + cat + '" href="#"><span class="glyphicon glyphicon-edit green"></span></a>')
+        print('</td>')
+        print('</tr>')
     print('<table>')
 
 def category_view(cat, title, id, name):
@@ -171,3 +191,26 @@ def code_view(cat, title, categories, subcategories, vendors, category_id, subca
     print("""</div>
            </div>
            </form>""")
+
+def option_view(cat, title, id, key, name, value):
+    print('Status: 200 OK')
+    print('Content-Type: text/plain')
+    print('')
+
+    print('<h4>' + title + '</h4>')
+    print('<form method="post" name="cat_save" id="cat_save" action="category_save.py" >')
+    print('<input type="hidden" name="id_cat" id="id_cat" value="' + id + '">')
+    print('<input type="hidden" name="key" id="id_cat" value="' + key + '">')
+
+    print('<div class="form-group">')
+    print('<label for="name" class="control-label col-sm-2">' + name + '</label>')
+    print('<div class="col-sm-10">')
+    print('<input type="text" name="value_cat" id="value_cat" value="' + value + '">')
+    print("""</div>
+       </div>
+       <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">""")
+    print('<button id="edit-submit" data-cat="' + cat + '" type="button" class="btn btn-primary">Сохранить</button>')
+    print("""</div>
+       </div>
+       </form>""")

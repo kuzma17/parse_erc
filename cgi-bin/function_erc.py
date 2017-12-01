@@ -1,1 +1,0 @@
-/usr/lib/cgi-bin/function_erc.py

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import pymysql
-import cgi
-import os
 
 class ErcFunction:
 
@@ -29,14 +27,6 @@ class ErcFunction:
         self.__session.close()
         self.__connection.close()
         ## End def close
-
-    def vendor(self, name): # the test function
-        sql = "SELECT id FROM erc_vendors WHERE name = %s"
-        self.open()
-        self.__session.execute(sql, [name])
-        id = self.__session.fetchone()[0]
-        self.close()
-        return id
 
     def code_prom(self, category, sub_category, vendor):
         sql = "SELECT pc.id, pc.code, pc.status FROM erc_codes AS pc " \
@@ -97,22 +87,21 @@ class ErcFunction:
         sql = "INSERT INTO erc_codes (vendor_id, category_id, sub_category_id, code, status) VALUE(%s, %s, %s, %s, %s)"
         self.__session.execute(sql, [vendor_id, category_id, subcategory_id, code, status])
 
-    def prices(self, ddp, par, sprice, rprice, curr):
-        sql = "SELECT a.value FROM erc_arguments AS a LEFT JOIN erc_categories AS ct ON ct.id = a.category_id  WHERE ct.name = %s"
+    def argument(self, par):
+        sql = "SELECT op.value FROM erc_options AS op LEFT JOIN erc_categories AS ct ON ct.id = op.category_id  WHERE ct.name = %s"
         self.__session.execute(sql, [par])
-        parr = self.__session.fetchone()[0]
-        ddp = int(ddp)
-        param = float(parr)
-        sprice = float(sprice)
-        rprice = float(rprice)
-        curr = float(curr)
-        if ddp == 0:
-            currency = curr
-        else:
-            currency = 1
-        price = round(sprice * currency * param, 0)
-        price_res = max(price, rprice)
-        return str(parr)
+        arg = self.__session.fetchone()[0]
+        return arg
+
+    def currency(self):
+        sql = "SELECT op.value FROM erc_options AS op WHERE op.key = 'currency'"
+        self.__session.execute(sql)
+        curr = self.__session.fetchone()[0]
+        return curr
+
+    def currency_edit(self, curr):
+        sql = "UPDATE erc_options AS op SET op.value = %s WHERE op.key = 'currency'"
+        self.__session.execute(sql, [curr])
 
     def catalogs(self):
         sql = "SELECT * FROM erc_codes"
@@ -160,3 +149,38 @@ class ErcFunction:
     def code_add(self, category, subcategory, vendor, code, parent_code, title, status):
         sql = "INSERT INTO erc_codes SET category_id = %s, sub_category_id = %s, vendor_id = %s, code = %s, parent_code = %s, title = %s, status = %s"
         self.__session.execute(sql, [category, subcategory, vendor, code, parent_code, title, status])
+
+    def option_edit(self, key, value_cat):
+        sql = "UPDATE erc_options AS o SET o.value = %s WHERE o.key = %s"
+        self.__session.execute(sql, [value_cat, key])
+
+    def save_xml_set(self, form):
+        new_currency = form.getvalue('currency')
+        categories = form.getlist("category")
+        new_categories = form.getlist("new_category")
+        new_vendor = form.getlist("add_vendor")
+        new_category = form.getlist("add_category")
+        new_subcategory = form.getlist("add_subcategory")
+
+        if new_currency:
+            self.currency_edit(new_currency)
+
+        for category in categories:
+            status = form.getvalue('status[' + category + ']')
+            self.update_status(category, status)
+
+        for new_id in new_categories:
+            vendor_id = self.add_vendor(new_vendor[int(new_id)])
+            category_id = self.add_category(new_category[int(new_id)])
+            subcategory_id = self.add_subcategory(new_subcategory[int(new_id)])
+            code = form.getvalue('add_code[' + new_id + ']')
+            status = form.getvalue('add_status[' + new_id + ']')
+
+            if code:
+                self.add_code(vendor_id, category_id, subcategory_id, code, status)
+
+    def country_ru(self, name_ua):
+        sql = "SELECT name_ru FROM erc_countries WHERE name_ua = %s"
+        self.__session.execute(sql, [name_ua])
+        name_ru = self.__session.fetchone()[0]
+        return name_ru

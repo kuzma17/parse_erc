@@ -22,7 +22,9 @@ body {
 }
 
 .code_prom{
-    font-family: Geneva, Arial, Helvetica, sans-serif; font-size: 11px; cursor: pointer
+    font-family: Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    cursor: pointer
 }
 
 .green{
@@ -36,4 +38,39 @@ body {
 }
 .white_bg{
     background-color: white;
+}
+.xml_check{
+    position:absolute;
+    left: 14%;
+}
+.block_button{
+    width: 50%;
+    float:right;
+    margin: 10px;
+}
+.logo{
+    float: right;
+    margin-top: -30px;
+    color: #3e8f3e;
+    font-weight: bold;
+}
+.logo_color{
+    color: #008FBF;
+}
+
+.block_xml_parse{
+    width: 70%;
+    margin: 0 auto
+}
+
+.block_xml_form{
+    width: 80%;
+    margin: 0 auto
+}
+
+.preloader{
+    width: 100px;
+    padding-top: 150px;
+    margin: 0 auto;
+    display: none
 }

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import cgi
 import xml.etree.cElementTree as ET
 import time
 from function import ErcFunction
@@ -10,6 +11,25 @@ erc.open()
 print('Status: 200 OK')
 print('Content-Type: text/plain')
 print('')
+
+def prices(ddp, par, sprice, rprice):
+    ddp = int(ddp)
+    sprice = float(sprice)
+    rprice = float(rprice)
+    curr = erc.currency()
+    param = erc.argument(par)
+    if ddp == 0:
+        currency = curr
+    else:
+        currency = 1
+    price = round(sprice * currency * param, 0)
+    price_out = max(price, rprice)
+    return str(price_out)
+
+# Save XML settings
+form = cgi.FieldStorage()
+erc.save_xml_set(form)
+erc.save()
 
 filename = 'erc.xml'
 download_patch = '/var/www/parse_erc/download_file/'
@@ -51,7 +71,7 @@ for vendor in root.findall('vendor'):
             categoryId.text = str(item_prom[1].decode())
             price = ET.SubElement(item, 'price')
 
-            price.text = erc.prices(good[8].text, good[0].text, good[7].text, good[5].text, 1.27)
+            price.text = prices(good[8].text, good[0].text, good[7].text, good[5].text)
 
             image = ET.SubElement(item, 'image')
             image.text = 'http://www.erc.ua/i/goods/' + good[3].text + '.jpg'
@@ -66,6 +86,8 @@ for vendor in root.findall('vendor'):
 
             country = ET.SubElement(item, 'country')
             country.text = good[24].text
+
+            #country.text = erc.country_ru(good[24].text).decode()
 
             if good[19].text and str(good[19].text) != '0' and str(good[19].text) != '0.00':
                 param_height = ET.SubElement(item, 'param')
@@ -97,4 +119,5 @@ erc.close()
 ET.ElementTree(new).write('/var/www/parse_erc/new.xml', 'utf-8', True)
 
 print('<p>XML файл успешно сформирован</p>')
-print('<p><a href="http://www.parser-erc/new.xml" target="_blank"><span class="glyphicon glyphicon-save"></span> скачать</p>')
+print('<p><a href="http://www.parser-erc/new.xml" target="_blank"><span class="glyphicon glyphicon-save"></span> скачать</p><br>')
+print('<a href="/">Перейти на главную</a>')

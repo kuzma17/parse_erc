@@ -3,6 +3,12 @@
  */
 $(document).ready(function(){
 
+        $('#option').click(function() {
+            $('#preloader').show();
+            $("#info").hide();
+            $.post("option_list.py",{},onResponse);
+            return false;
+        });
         $('#category').click(function() {
             $('#preloader').show();
             $("#info").hide();

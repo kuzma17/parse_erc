@@ -13,11 +13,14 @@
 <div class="container" >
     <div class="row">
         <div class="rcol-sm-12 col-md-12 col-lg-12">
-            <h2>Парсер ERC_</h2>
-            <div class="menu">
-                <a href="/">Главная</a>
-                <a href="/settings.html">Settings</a>
-            </div>
+            <div>
+                <ul class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="/">Главная</a></li>
+                <li role="presentation"><a href="/settings.html">Параметры</a></li>
+                </ul>
+                <h3 class="logo"> Parser<span class="logo_color">ERC</span></h3>
+                </div><br>
+            <div id="info_myForm" class="block_xml_form">
             <form id="myForm" action="/cgi-bin/form.py" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label  class="col-md-3 control-label">Выберите исходный файл<span class="red">*</span></label>
@@ -26,35 +29,21 @@
                     </div>
                 </div>
                  <div class="form-group">
-                    <label  class="col-md-3 control-label">Курс USD<span class="red">*</span></label>
+                    <label class="col-md-3 control-label">Курс USD<span class="red">*</span></label>
                     <div class="col-md-9">
-                         <input type="text" name="currency" id="currency">
+                         <input type="text" name="currency" id="currency" value="">
                     </div>
                 </div>
-                 <div class="form-group">
-                    <label  class="col-md-3 control-label">Param 1<span class="red">*</span></label>
-                    <div class="col-md-9">
-                         <input type="text" name="param1" id="param1">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label  class="col-md-3 control-label">Param 2<span class="red">*</span></label>
-                    <div class="col-md-9">
-                         <input type="text" name="param2">
-                    </div>
-                </div>
-
                 <div class="form-group">
                     <label  class="col-md-3 control-label"></label>
                     <div class="col-md-9">
-                         <input type="submit" value="Parse" id="submit">
-                        <button id="upload-file-btn" type="button" class="btn btn-primary" data-dismiss="modal" value="Upload">Upload</button>
+                        <button id="upload-file-btn" type="button" class="btn btn-primary">Загрузить</button>
                     </div>
                 </div>
             </form>
-            <hr>
-            <div id="preloader" style="width: 100px; margin: 0 auto; display: none"><img src="/img/325.gif" alt=""/></div>
-            <div id="info"></div>
+                </div>
+            <div id="preloader" class="preloader"><img src="/img/325.gif" alt=""/></div>
+            <div id="info" class="block_xml_parse"></div>
 
         </div>
     </div>

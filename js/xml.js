@@ -84,9 +84,18 @@ $(document).ready(function() {
     $('#info').on("mouseover", ".code_prom", function(){
         $(this).css({marginTop: '1px'});
         $(this).children("span").css({fontSize: '12px'});
-    })
+    });
     $('#info').on("mouseout", ".code_prom", function(){
         $(this).css({marginTop: '-1px'});
         $(this).children("span").css({fontSize: '8px'});
-    })
+    });
+    $('#info').on("click", "#all_checkbox", function(){
+        if($(this).prop("checked")){
+            $('#all_checkbox_text').html('Снять все');
+            $('.xml_check').prop("checked", true);
+        }else{
+            $('#all_checkbox_text').html('Выбрать все');
+            $('.xml_check').prop("checked", false);
+        }
+    });
 });

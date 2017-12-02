@@ -1,9 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+    background-color: #e0ebeb;
+}
+
 div{
     border: 0px red solid;
 }
 
-body {
-
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.content {
+  flex: 1 0 auto;
+}
+.footer {
+  flex: 0 0 auto;
+    background-color: #c1d7d7;
+    border-top: 1px solid #b3b3b3;
 }
 
 .clear{
@@ -24,7 +43,16 @@ body {
 .code_prom{
     font-family: Geneva, Arial, Helvetica, sans-serif;
     font-size: 11px;
-    cursor: pointer
+    cursor: pointer;
+    height: 18px;
+    //border: 1px solid red;
+}
+.code_prom_none{
+    font-family: Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    height: 26px;
+    //border: 1px solid red;
 }
 
 .green{
@@ -40,19 +68,29 @@ body {
     background-color: white;
 }
 .xml_check{
-    position:absolute;
-    left: 14%;
+    margin: 0;
+    padding: 0;
 }
+
+.block_xml_check{
+    width: 20px;
+    float: left;
+    margin-top: -7px;
+}
+
 .block_button{
     width: 50%;
     float:right;
     margin: 10px;
 }
 .logo{
-    float: right;
-    margin-top: -30px;
+    float: left;
     color: #3e8f3e;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 24px;
     font-weight: bold;
+    padding-top: 10px;
+    width: 170px;
 }
 .logo_color{
     color: #008FBF;
@@ -73,4 +111,35 @@ body {
     padding-top: 150px;
     margin: 0 auto;
     display: none
+}
+.menu_top{
+    background-color: #d0e1e1;
+    border: 1px solid #cccccc
+}
+.border_block{
+    border: 1px solid #cccccc;
+}
+.copyright{
+    float:right;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    color: #2b669a;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.active{
+    background-color:  #eff5f5;
+}
+.navbar-nav li a:hover{
+    background-color:  #eff5f5;
+}
+
+.all_checkbox{
+    font-weight: bold;
+}
+
+#all_checkbox{
+    color: #2b669a;
+    background-color: #2aabd2;
 }

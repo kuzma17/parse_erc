@@ -13,7 +13,11 @@ id = form.getvalue('id_cat')
 value_cat = form.getvalue('value_cat')
 key = form.getvalue('key')
 
-erc.option_edit(key, value_cat)
+if key == 'currency':
+    erc.currency_edit(value_cat)
+else:
+    erc.option_edit(key, value_cat)
+
 erc.save()
 
 table = 'erc_options'

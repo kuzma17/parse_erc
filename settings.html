@@ -9,35 +9,44 @@
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/settings.js"></script>
 </head>
-<body style="background-color: #e0ebeb;">
-<div class="container" >
-    <div class="row">
-        <div class="rcol-sm-12 col-md-12 col-lg-12">
-            <div>
-                <ul class="nav nav-tabs">
-                <li role="presentation"><a href="/">Главная</a></li>
-                <li role="presentation" class="active"><a href="/settings.html">Параметры</a></li>
-                </ul>
-                <h3 class="logo"> Парсер<span class="logo_color">ERC</span></h3>
-                </div><br>
-            <div class="rcol-sm-3 col-md-3 col-lg-3">
-                <br>
-                <ul class="nav nav-pills nav-stacked white_bg">
-                    <li role="presentation" id="option"><a href="#">Параметры</a></li>
-                    <li role="presentation" id="category"><a href="#">Категории</a></li>
-                    <li role="presentation" id="subcategory"><a href="#">Субкатегории</a></li>
-                    <li role="presentation" id="vendor"><a href="#">Бренды</a></li>
-                    <li role="presentation" id="code"><a href="#">Коды</a></li>
-                </ul>
-        </div>
-        <div class="rcol-sm-9 col-md-9 col-lg-9">
-            <div id="info"></div>
-        </div>
-            <div id="preloader" class="preloader"><img src="/img/325.gif" alt=""/></div>
-
+<body>
+<div class="wrapper">
+    <div class="content">
+        <nav class="navbar navbar-expand-sm menu_top">
+            <div class="container">
+                <div class="logo"> Parser<span class="logo_color">ERC</span></div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/">Главная</a></li>
+                        <li class="active"><a href="/settings.html">Параметры</a></li>
+                        <li><a href="/help.html">Помощь</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="rcol-sm-3 col-md-3 col-lg-3">
+                    <br>
+                    <ul class="nav nav-pills nav-stacked white_bg border_block">
+                        <li role="presentation" id="option"><a href="#">Параметры</a></li>
+                        <li role="presentation" id="category"><a href="#">Категории</a></li>
+                        <li role="presentation" id="subcategory"><a href="#">Субкатегории</a></li>
+                        <li role="presentation" id="vendor"><a href="#">Бренды</a></li>
+                        <li role="presentation" id="code"><a href="#">Коды</a></li>
+                    </ul>
+                </div>
+                <div class="rcol-sm-9 col-md-9 col-lg-9">
+                    <div id="info"></div>
+                </div>
+                <div id="preloader" class="preloader"><img src="/img/325.gif" alt=""/></div>
+            </div>
         </div>
     </div>
-</div>
 
+    <div class="footer">
+        <span class="copyright">Copyright 2017 @ design by kuzma</span>
+    </div>
+</div>
 </body>
 </html>

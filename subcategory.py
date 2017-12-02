@@ -7,7 +7,7 @@ from templates import category_view
 form = cgi.FieldStorage()
 id = form.getvalue('data')
 
-table = 'erc_sub_categories'
+table = 'erc_subcategories'
 
 if id:
     erc = ErcFunction()

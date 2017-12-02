@@ -37,7 +37,7 @@ else:
     status = '0'
 
 categories = erc.cat_list('erc_categories')
-subcategories = erc.cat_list('erc_sub_categories')
+subcategories = erc.cat_list('erc_subcategories')
 vendors = erc.cat_list('erc_vendors')
 erc.close()
 cat = 'code'

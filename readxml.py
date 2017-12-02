@@ -42,6 +42,8 @@ try:
     tmp_list = []
     i = 0
 
+    print('<div class="all_checkbox"><input type="checkbox" id="all_checkbox"> <span id="all_checkbox_text">Выбрать все</span></div>')
+
     for vendor in root.findall('vendor'):
         goods = vendor.findall('goods')
         vendor_name = vendor.get('name')
@@ -56,19 +58,19 @@ try:
                 if code and code[1]:
                     print(
                         '<div class="code_prom green">')
-                    print('<input name="status[' + str(
+                    print('<div class="block_xml_check"><input name="status[' + str(
                         int(code[0])) + ']" class="xml_check" type="checkbox" ')
                     if int(code[2]) == 1:
                         print(' checked="checked"')
 
-                    print(' >')
+                    print(' ></div>')
                     print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>',
                           ' <span class="label label-success" >',
                           code[1].decode(), '</span>')
                     print('<input type="hidden" name="category" value="' + str(int(code[0])) + '" >')
 
                 else:
-                    print('<div class="code_prom red">')
+                    print('<div class="code_prom_none red">')
                     print('<input name="add_status[' + str(
                         i) + ']" class="xml_check" type="checkbox" >')
                     print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>',

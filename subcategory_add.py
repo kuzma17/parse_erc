@@ -10,13 +10,13 @@ erc.open()
 form = cgi.FieldStorage()
 name = form.getvalue('name_cat')
 
-table = 'erc_sub_categories'
+table = 'erc_subcategories'
 erc.cat_add(table, name)
 erc.save()
 
-erc_sub_categories = erc.cat_list(table)
+erc_subcategories = erc.cat_list(table)
 erc.close()
 
 title = 'Субкатегории'
 cat = 'subcategory'
-category_list(cat, title, erc_sub_categories)
+category_list(cat, title, erc_subcategories)

@@ -13,7 +13,6 @@ class ErcFunction:
 
     def open(self):
         try:
-            #con = MySQLdb.connect(self.__host, self.__user, self.__password, self.__database)
             con = pymysql.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
             self.__connection = con
             self.__session = con.cursor()
@@ -26,12 +25,11 @@ class ErcFunction:
     def close(self):
         self.__session.close()
         self.__connection.close()
-        ## End def close
 
     def code_prom(self, category, sub_category, vendor):
         sql = "SELECT pc.id, pc.code, pc.status FROM erc_codes AS pc " \
               "LEFT JOIN erc_categories AS ct ON ct.id = pc.category_id " \
-              "LEFT JOIN erc_sub_categories AS sc ON sc.id = pc.sub_category_id " \
+              "LEFT JOIN erc_subcategories AS sc ON sc.id = pc.sub_category_id " \
               "LEFT JOIN erc_vendors AS v ON v.id = pc.vendor_id " \
               "WHERE ct.name = %s AND sc.name = %s AND v.name = %s LIMIT 1"
         self.__session.execute(sql, [category, sub_category, vendor])
@@ -70,11 +68,11 @@ class ErcFunction:
 
     def add_subcategory(self, name):
         try:
-            sql = "SELECT id FROM erc_sub_categories WHERE name = %s"
+            sql = "SELECT id FROM erc_subcategories WHERE name = %s"
             self.__session.execute(sql, [name])
             id = self.__session.fetchone()[0]
         except:
-            sql = "INSERT INTO erc_sub_categories SET name = %s"
+            sql = "INSERT INTO erc_subcategories SET name = %s"
             self.__session.execute(sql, [name])
             id = self.__session.lastrowid
         return id
@@ -100,6 +98,8 @@ class ErcFunction:
         return curr
 
     def currency_edit(self, curr):
+        curr = curr.replace(',', '.')
+        curr = round(float(curr), 2)
         sql = "UPDATE erc_options AS op SET op.value = %s WHERE op.key = 'currency'"
         self.__session.execute(sql, [curr])
 
@@ -136,7 +136,7 @@ class ErcFunction:
     def code_list(self):
         sql = "SELECT pc.id, ct.name, sc.name, v.name, pc.code, pc.parent_code, pc.title, pc.status FROM erc_codes AS pc " \
               "LEFT JOIN erc_categories AS ct ON ct.id = pc.category_id " \
-              "LEFT JOIN erc_sub_categories AS sc ON sc.id = pc.sub_category_id " \
+              "LEFT JOIN erc_subcategories AS sc ON sc.id = pc.sub_category_id " \
               "LEFT JOIN erc_vendors AS v ON v.id = pc.vendor_id "
         self.__session.execute(sql)
         codes = self.__session.fetchall()
@@ -151,6 +151,7 @@ class ErcFunction:
         self.__session.execute(sql, [category, subcategory, vendor, code, parent_code, title, status])
 
     def option_edit(self, key, value_cat):
+        value_cat = value_cat.replace(',', '.')
         sql = "UPDATE erc_options AS o SET o.value = %s WHERE o.key = %s"
         self.__session.execute(sql, [value_cat, key])
 

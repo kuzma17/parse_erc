@@ -85,7 +85,6 @@ $(document).ready(function(){
                  async: false,
                  success: function(data) {
                      onResponse(data)
-                     //alert(data);
                  }
              });
         });
@@ -105,7 +104,8 @@ $(document).ready(function(){
         function onResponse(data){
             $('#preloader').hide();
             $("#info").html(data);
-            $("#info").show(300);
+            //$("#info").show(300);
+            $("#info").slideDown(600);
         }
 
     });

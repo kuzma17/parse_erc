@@ -70,7 +70,11 @@ $(document).ready(function() {
             processData: false,
             async: false,
             success: function(data) {
-                onResponse(data)
+                //onResponse(data)
+                $('#preloader').hide();
+                $("#info").html(data);
+                //$("#info").show(300);
+                $("#info").slideDown(400);;
             }
         });
     });
@@ -78,7 +82,8 @@ $(document).ready(function() {
     function onResponse(data){
         $('#preloader').hide();
         $("#info").html(data);
-        $("#info").show(300);
+        //$("#info").show(300);
+        $("#info").slideDown(1000);;
     }
 
     $('#info').on("mouseover", ".code_prom", function(){

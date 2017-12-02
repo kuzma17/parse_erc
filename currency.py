@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import cgi
 from function import ErcFunction
 
 print('Status: 200 OK')

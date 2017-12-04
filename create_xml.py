@@ -44,9 +44,25 @@ new = ET.Element('price')
 new.set('date', time.strftime("%Y-%m-%d %H:%M", time.localtime()))
 name = ET.SubElement(new, 'name')
 name.text = 'Интернет-магазин'
-currency = ET.SubElement(new, 'currency')
-currency.set('code', 'UAH')
-currency.text = '7.00'
+currencies = ET.SubElement(new, 'currencies')
+currency = ET.SubElement(currencies, 'currency')
+currency.set('id', 'USD')
+currency.set('rate', 'CB')
+currency = ET.SubElement(currencies, 'currency')
+currency.set('id', 'KZT')
+currency.set('rate', 'CB')
+currency = ET.SubElement(currencies, 'currency')
+currency.set('id', 'RUR')
+currency.set('rate', 'CB')
+currency = ET.SubElement(currencies, 'currency')
+currency.set('id', 'BYN')
+currency.set('rate', 'CB')
+currency = ET.SubElement(currencies, 'currency')
+currency.set('id', 'UAH')
+currency.set('rate', '1')
+currency = ET.SubElement(currencies, 'currency')
+currency.set('id', 'EUR')
+currency.set('rate', 'CB')
 catalog = ET.SubElement(new, 'catalog')
 for cat in erc.catalogs():
     category = ET.SubElement(catalog, 'category')
@@ -55,7 +71,7 @@ for cat in erc.catalogs():
         category.set('parentId', str(cat[5].decode()))
     category.text = str(cat[6], 'utf-8')
 
-items = ET.SubElement(new, 'items')
+offers = ET.SubElement(new, 'offers')
 
 for vendor in root.findall('vendor'):
     goods = vendor.findall('goods')
@@ -63,56 +79,81 @@ for vendor in root.findall('vendor'):
     for good in goods:
         item_prom = erc.code_prom(good[0].text, good[1].text, vendor_name)
         if item_prom and item_prom[2] == 1 and item_prom[1]:
-            item = ET.SubElement(items, 'item')
-            item.set('id', str(good[3].text))
-            title = ET.SubElement(item, 'name')
-            title.text = good[2].text
-            categoryId = ET.SubElement(item, 'categoryId')
-            categoryId.text = str(item_prom[1].decode())
-            price = ET.SubElement(item, 'price')
-
+            offer = ET.SubElement(offers, 'offer')
+            if str(good[11].text) == 'Да':
+                available_text = 'true'
+            else:
+                available_text = 'false'
+            offer.set('available', available_text)
+            offer.set('id', good[3].text)
+            price = ET.SubElement(offer, 'price')
             price.text = prices(good[8].text, good[0].text, good[7].text, good[5].text)
-
-            image = ET.SubElement(item, 'image')
-            image.text = 'http://www.erc.ua/i/goods/' + good[3].text + '.jpg'
-            vendor = ET.SubElement(item, 'vendor')
+            categoryId = ET.SubElement(offer, 'categoryId')
+            categoryId.text = str(item_prom[1].decode())
+            picture = ET.SubElement(offer, 'picture')
+            picture.text = 'http://www.erc.ua/i/goods/' + good[3].text + '.jpg'
+            currencyId = ET.SubElement(offer, 'currencyId')
+            currencyId.text = 'UAH'
+            pickup = ET.SubElement(offer, 'pickup')
+            pickup.text = 'true'
+            delivery = ET.SubElement(offer, 'delivery')
+            delivery.text = 'true'
+            name = ET.SubElement(offer, 'name')
+            name.text = good[2].text
+            vendor = ET.SubElement(offer, 'vendor')
             vendor.text = vendor_name
-            description = ET.SubElement(item, 'description')
-            description.text = str(good[26].text)
-            # if good[27].text:
-            #   description.text += str(good[27].text)
-            warranty = ET.SubElement(item, 'warranty')
-            warranty.text = good[9].text
-
-            country = ET.SubElement(item, 'country')
-            country.text = good[24].text
-
-            #country.text = erc.country_ru(good[24].text).decode()
-
-            if good[19].text and str(good[19].text) != '0' and str(good[19].text) != '0.00':
-                param_height = ET.SubElement(item, 'param')
-                param_height.set('name', 'высота')
-                param_height.text = good[19].text
-
-            if good[18].text and str(good[18].text) != '0' and str(good[18].text) != '0.00':
-                param_width = ET.SubElement(item, 'param')
-                param_width.set('name', 'ширина')
-                param_width.text = good[18].text
+            vendorCode = ET.SubElement(offer, 'vendorCode')
+            vendorCode.text = good[3].text
+            country_of_origin = ET.SubElement(offer, 'country_of_origin')
+            if good[24].text:
+                country_text = erc.country_ru(good[24].text).decode()
+            else:
+                country_text = 'None'
+            country_of_origin.text = country_text
+            description = ET.SubElement(offer, 'description')
+            description.text = '<![CDATA[' + str(good[26].text) + ']]>'
+            sales_notes = ET.SubElement(offer, 'sales_notes')
+            sales_notes.text = 'предоплата'
 
             if good[20].text and str(good[20].text) != '0' and str(good[20].text) != '0.00':
-                param_depth = ET.SubElement(item, 'param')
-                param_depth.set('name', 'глубина')
-                param_depth.text = good[20].text
+                param_height = ET.SubElement(offer, 'param')
+                param_height.set('name', 'Высота')
+                param_height.set('unit', 'см')
+                param_height.text = good[20].text
+
+            if good[19].text and str(good[19].text) != '0' and str(good[19].text) != '0.00':
+                param_width = ET.SubElement(offer, 'param')
+                param_width.set('name', 'Ширина')
+                param_width.set('unit', 'см')
+                param_width.text = good[19].text
 
             if good[21].text and str(good[21].text) != '0' and str(good[21].text) != '0.00':
-                param_weight = ET.SubElement(item, 'param')
-                param_weight.set('name', 'вес')
-                param_weight.text = good[21].text
+                param_depth = ET.SubElement(offer, 'param')
+                param_depth.set('name', 'Глубина')
+                param_depth.set('unit', 'см')
+                param_depth.text = good[21].text
 
             if good[22].text and str(good[22].text) != '0' and str(good[22].text) != '0.00':
-                param_volume = ET.SubElement(item, 'param')
-                param_volume.set('name', 'объем')
-                param_volume.text = good[22].text
+                param_weight = ET.SubElement(offer, 'param')
+                param_weight.set('name', 'Вес')
+                param_weight.set('unit', 'кг')
+                param_weight.text = good[22].text
+
+            if good[23].text and str(good[23].text) != '0' and str(good[23].text) != '0.00':
+                param_volume = ET.SubElement(offer, 'param')
+                param_volume.set('name', 'Объем')
+                param_volume.set('unit', '(кв.м.)')
+                param_volume.text = good[23].text
+
+            if good[9].text and str(good[9].text) != '0' and str(good[9].text) != '0.00':
+                param_warranty = ET.SubElement(offer, 'param')
+                param_warranty.set('name', 'Гарантия')
+                param_warranty.set('unit', good[10].text)
+                if int(good[9].text) > 0:
+                    param_warranty_text = good[9].text
+                else:
+                    param_warranty_text = '0'
+                param_warranty.text = param_warranty_text
 
 erc.close()
 

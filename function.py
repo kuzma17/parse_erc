@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import pymysql
+import MySQLdb
 
 class ErcFunction:
 
@@ -13,10 +13,10 @@ class ErcFunction:
 
     def open(self):
         try:
-            con = pymysql.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
+            con = MySQLdb.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
             self.__connection = con
             self.__session = con.cursor()
-        except pymysql.Error as e:
+        except MySQLdb.Error as e:
             print("Error %d: %s" % (e.args[0], e.args[1]))
 
     def save(self):

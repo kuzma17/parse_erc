@@ -33,6 +33,12 @@ $(document).ready(function () {
         $.post("code_list.py", {}, onResponse);
         return false;
     });
+    $('#prom_code').click(function () {
+        $('#preloader').show();
+        $("#info").hide();
+        $.post("prom_list.py", {}, onResponse);
+        return false;
+    });
 
 
     $('#info').on("click", ".edit_cat", function () {

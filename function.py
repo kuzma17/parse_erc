@@ -134,10 +134,11 @@ class ErcFunction:
         self.__session.execute(sql, [name])
 
     def code_list(self):
-        sql = "SELECT pc.id, ct.name, sc.name, v.name, pc.code, pc.parent_code, pc.title, pc.status FROM erc_codes AS pc " \
-              "LEFT JOIN erc_categories AS ct ON ct.id = pc.category_id " \
-              "LEFT JOIN erc_subcategories AS sc ON sc.id = pc.sub_category_id " \
-              "LEFT JOIN erc_vendors AS v ON v.id = pc.vendor_id "
+        sql = "SELECT c.id, ct.name, sc.name, v.name, pc.code, pc.title, c.status FROM erc_codes AS c " \
+              "LEFT JOIN erc_categories AS ct ON ct.id = c.category_id " \
+              "LEFT JOIN erc_subcategories AS sc ON sc.id = c.sub_category_id " \
+              "LEFT JOIN erc_vendors AS v ON v.id = c.vendor_id " \
+              "LEFT JOIN erc_promcats AS pc ON pc.id = c.promcat_id"
         self.__session.execute(sql)
         codes = self.__session.fetchall()
         return codes
@@ -185,3 +186,21 @@ class ErcFunction:
         self.__session.execute(sql, [name_ua])
         name_ru = self.__session.fetchone()[0]
         return name_ru
+
+    def prom_edit(self, id, code, parent_code, title):
+        sql = "UPDATE erc_promcats SET code = %s, parent_code = %s, title = %s WHERE id = %s"
+        self.__session.execute(sql, [code, parent_code, title, id])
+
+    def prom_add(self, code, parent_code, title):
+        sql = "INSERT INTO erc_promcats SET code = %s, parent_code = %s, title = %s "
+        self.__session.execute(sql, [code, parent_code, title])
+
+    def prom_code_list123(self, code):
+        sql = "SELECT id, code FROM erc_promcats WHERE code = %s"
+        self.__session.execute(sql, [code])
+        cat = self.__session.fetchone()
+        return cat
+
+    def prom_code_list_save(self, code_id, code):
+        sql = "UPDATE erc_codes SET promcat_id = %s WHERE code = %s"
+        self.__session.execute(sql, [code_id, code])

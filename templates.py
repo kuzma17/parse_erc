@@ -124,7 +124,7 @@ def category_view(cat, title, id, name):
        </div>
        </form>""")
 
-def code_view(cat, title, categories, subcategories, vendors, category_id, subcategory_id, vendor_id, id, code, parent_code, title_code, status):
+def code_view(cat, title, categories, subcategories, vendors, category_id, subcategory_id, vendor_id, id, code_code, code_prom_list, status):
     print('Status: 200 OK')
     print('Content-Type: text/plain')
     print('')
@@ -171,26 +171,21 @@ def code_view(cat, title, categories, subcategories, vendors, category_id, subca
     print("""</div>
                   </div>
                <div class="form-group">
-                 <label for="name" class="control-label col-sm-2">Код</label>
+                 <label for="name" class="control-label col-sm-2">Код PROM</label>
            	  <div class="col-sm-10">""")
-    print('<input type="text" name="code" id="code" value="' + code + '">')
+    #print('<select name="code" id="code" >')
+    #for code_prom in code_prom_list:
+    #    print('<option value="' + str(code_prom[0]) + '"')
+    #    if code_code and int(code_code) == int(code_prom[0]):
+     #       print(' selected ')
+     #   print('>' + str(code_prom[1]) + '</option>')
+    #print('</select>')
+    print('<input type="text" name="code" id="code" value="'+str(code_code)+'">')
     print("""</div>
-                     </div>
-                  <div class="form-group">
-                    <label for="name" class="control-label col-sm-2">parent code</label>
-              	  <div class="col-sm-10">""")
-    print('<input type="text" name="parent_code" id="parent_code" value="' + parent_code + '">')
-    print("""</div>
-                     </div>
-                  <div class="form-group">
-                    <label for="name" class="control-label col-sm-2">Title</label>
-              	  <div class="col-sm-10">""")
-    print('<input type="text" name="title" id="title" value="' + title_code + '">')
-    print("""</div>
-                        </div>
-                     <div class="form-group">
-                       <label for="name" class="control-label col-sm-2">Status</label>
-                 	  <div class="col-sm-10">""")
+                      </div>
+                   <div class="form-group">
+                     <label for="name" class="control-label col-sm-2">Бренд</label>
+               	  <div class="col-sm-10">""")
     print('<select name="status" id="status" >')
     print('<option value="0"')
     if int(status) == 0:

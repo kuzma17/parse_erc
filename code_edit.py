@@ -13,11 +13,9 @@ category = form.getvalue('category')
 subcategory = form.getvalue('subcategory')
 vendor = form.getvalue('vendor')
 code = form.getvalue('code')
-parent_code = form.getvalue('parent_code')
-title_code = form.getvalue('title')
 status = form.getvalue('status')
 
-erc.code_edit(category, subcategory, vendor, code, parent_code, title_code, status, id_cat)
+erc.code_edit(category, subcategory, vendor, code, status, id_cat)
 erc.save()
 
 erc_codes = erc.code_list()

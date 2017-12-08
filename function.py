@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import MySQLdb
+import pymysql
 
 class ErcFunction:
 
@@ -13,10 +13,10 @@ class ErcFunction:
 
     def open(self):
         try:
-            con = MySQLdb.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
+            con = pymysql.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
             self.__connection = con
             self.__session = con.cursor()
-        except MySQLdb.Error as e:
+        except pymysql.Error as e:
             print("Error %d: %s" % (e.args[0], e.args[1]))
 
     def save(self):
@@ -143,13 +143,28 @@ class ErcFunction:
         codes = self.__session.fetchall()
         return codes
 
-    def code_edit(self, category, subcategory, vendor, code, parent_code, title, status, id):
-        sql = "UPDATE erc_codes SET category_id = %s, sub_category_id = %s, vendor_id = %s, code = %s, parent_code = %s, title = %s, status = %s WHERE id = %s"
-        self.__session.execute(sql, [category, subcategory, vendor, code, parent_code, title, status, id])
+    def id_promcat(self, code):
+        sql = "SELECT id FROM erc_promcats WHERE code = %s"
+        self.__session.execute(sql, [code])
+        id = self.__session.fetchone()[0]
+        return id
 
-    def code_add(self, category, subcategory, vendor, code, parent_code, title, status):
-        sql = "INSERT INTO erc_codes SET category_id = %s, sub_category_id = %s, vendor_id = %s, code = %s, parent_code = %s, title = %s, status = %s"
-        self.__session.execute(sql, [category, subcategory, vendor, code, parent_code, title, status])
+    def code(self, id):
+        sql = "SELECT c.id, c.category_id, c.sub_category_id, c.vendor_id, pc.code, c.status FROM erc_codes AS c " \
+              "LEFT JOIN erc_promcats AS pc ON pc.id = c.promcat_id WHERE c.id = %s"
+        self.__session.execute(sql, [id])
+        codes = self.__session.fetchone()
+        return codes
+
+    def code_edit(self, category, subcategory, vendor, code, status, id):
+        id_promcat = self.id_promcat(code)
+        sql = "UPDATE erc_codes SET category_id = %s, sub_category_id = %s, vendor_id = %s, promcat_id = %s, status = %s WHERE id = %s"
+        self.__session.execute(sql, [category, subcategory, vendor, id_promcat, status, id])
+
+    def code_add(self, category, subcategory, vendor, code, status):
+        id_promcat = self.id_promcat(code)
+        sql = "INSERT INTO erc_codes SET category_id = %s, sub_category_id = %s, vendor_id = %s, promcat_id = %s, status = %s"
+        self.__session.execute(sql, [category, subcategory, vendor, id_promcat, status])
 
     def option_edit(self, key, value_cat):
         value_cat = value_cat.replace(',', '.')

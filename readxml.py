@@ -58,15 +58,14 @@ try:
                 if code and code[1]:
                     print(
                         '<div class="code_prom green">')
-                    print('<div class="block_xml_check"><input name="status[' + str(
-                        int(code[0])) + ']" class="xml_check" type="checkbox" ')
+                    print('<div class="block_xml_check"><input name="status[' + str(int(code[0])) + ']" class="xml_check" type="checkbox" ')
                     if int(code[2]) == 1:
                         print(' checked="checked"')
 
                     print(' ></div>')
                     print(vendor_name, '=>', good[0].text, '=>', good[1].text, '=>',
                           ' <span class="label label-success" >',
-                          code[1].decode(), '</span>')
+                          str(code[1]), '</span>')
                     print('<input type="hidden" name="category" value="' + str(int(code[0])) + '" >')
 
                 else:

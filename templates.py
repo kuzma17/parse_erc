@@ -184,7 +184,7 @@ def code_view(cat, title, categories, subcategories, vendors, category_id, subca
     print("""</div>
                       </div>
                    <div class="form-group">
-                     <label for="name" class="control-label col-sm-2">Бренд</label>
+                     <label for="name" class="control-label col-sm-2">ON/OFF</label>
                	  <div class="col-sm-10">""")
     print('<select name="status" id="status" >')
     print('<option value="0"')

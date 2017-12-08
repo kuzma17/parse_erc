@@ -26,6 +26,6 @@ else:
     title_code = ''
 
 cat = 'prom'
-list_code = erc.cat_list(table)
+list_code = erc.prom_list()
 erc.close()
 prom_view(cat, title, id_cat, code, parent_code, title_code, list_code)

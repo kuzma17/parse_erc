@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import pymysql
+import MySQLdb
 
 class ErcFunction:
 
@@ -13,10 +13,10 @@ class ErcFunction:
 
     def open(self):
         try:
-            con = pymysql.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
+            con = MySQLdb.connect(self.__host, self.__user, self.__password, self.__database, charset='utf8', use_unicode=False)
             self.__connection = con
             self.__session = con.cursor()
-        except pymysql.Error as e:
+        except MySQLdb.Error as e:
             print("Error %d: %s" % (e.args[0], e.args[1]))
 
     def save(self):
@@ -27,10 +27,11 @@ class ErcFunction:
         self.__connection.close()
 
     def code_prom(self, category, sub_category, vendor):
-        sql = "SELECT pc.id, pc.code, pc.status FROM erc_codes AS pc " \
-              "LEFT JOIN erc_categories AS ct ON ct.id = pc.category_id " \
-              "LEFT JOIN erc_subcategories AS sc ON sc.id = pc.sub_category_id " \
-              "LEFT JOIN erc_vendors AS v ON v.id = pc.vendor_id " \
+        sql = "SELECT c.id, pc.code, c.status FROM erc_codes AS c " \
+              "LEFT JOIN erc_categories AS ct ON ct.id = c.category_id " \
+              "LEFT JOIN erc_subcategories AS sc ON sc.id = c.sub_category_id " \
+              "LEFT JOIN erc_vendors AS v ON v.id = c.vendor_id " \
+              "LEFT JOIN erc_promcats AS pc ON pc.id = c.promcat_id " \
               "WHERE ct.name = %s AND sc.name = %s AND v.name = %s LIMIT 1"
         self.__session.execute(sql, [category, sub_category, vendor])
         code = self.__session.fetchone()
@@ -104,7 +105,7 @@ class ErcFunction:
         self.__session.execute(sql, [curr])
 
     def catalogs(self):
-        sql = "SELECT * FROM erc_codes"
+        sql = "SELECT * FROM erc_promcats"
         self.__session.execute(sql)
         cat = self.__session.fetchall()
         return cat
@@ -186,15 +187,15 @@ class ErcFunction:
             status = form.getvalue('status[' + category + ']')
             self.update_status(category, status)
 
-        for new_id in new_categories:
-            vendor_id = self.add_vendor(new_vendor[int(new_id)])
-            category_id = self.add_category(new_category[int(new_id)])
-            subcategory_id = self.add_subcategory(new_subcategory[int(new_id)])
-            code = form.getvalue('add_code[' + new_id + ']')
-            status = form.getvalue('add_status[' + new_id + ']')
+        #for new_id in new_categories:
+         #   vendor_id = self.add_vendor(new_vendor[int(new_id)])
+          #  category_id = self.add_category(new_category[int(new_id)])
+         #   subcategory_id = self.add_subcategory(new_subcategory[int(new_id)])
+         #   code = form.getvalue('add_code[' + new_id + ']')
+          #  status = form.getvalue('add_status[' + new_id + ']')
 
-            if code:
-                self.add_code(vendor_id, category_id, subcategory_id, code, status)
+           # if code:
+            #    self.add_code(vendor_id, category_id, subcategory_id, code, status)
 
     def country_ru(self, name_ua):
         sql = "SELECT name_ru FROM erc_countries WHERE name_ua = %s"
@@ -210,12 +211,14 @@ class ErcFunction:
         sql = "INSERT INTO erc_promcats SET code = %s, parent_code = %s, title = %s "
         self.__session.execute(sql, [code, parent_code, title])
 
-    def prom_code_list123(self, code):
-        sql = "SELECT id, code FROM erc_promcats WHERE code = %s"
-        self.__session.execute(sql, [code])
-        cat = self.__session.fetchone()
-        return cat
+    def vendor_prom(self, name):
+        sql = "SELECT name_prom FROM erc_vendors WHERE name = %s LIMIT 1"
+        self.__session.execute(sql, [name])
+        name_prom = self.__session.fetchone()[0]
+        return name_prom
 
-    def prom_code_list_save(self, code_id, code):
-        sql = "UPDATE erc_codes SET promcat_id = %s WHERE code = %s"
-        self.__session.execute(sql, [code_id, code])
+    def prom_list(self):
+        sql = "SELECT * FROM erc_promcats ORDER BY title DESC"
+        self.__session.execute(sql)
+        list = self.__session.fetchall()
+        return list

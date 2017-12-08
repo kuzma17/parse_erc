@@ -66,10 +66,10 @@ currency.set('rate', 'CB')
 catalog = ET.SubElement(new, 'catalog')
 for cat in erc.catalogs():
     category = ET.SubElement(catalog, 'category')
-    category.set('id', str(cat[4], 'utf-8'))
-    if cat[5]:
-        category.set('parentId', str(cat[5].decode()))
-    category.text = str(cat[6], 'utf-8')
+    category.set('id', str(cat[1]))
+    if int(cat[2]) != 0:
+        category.set('parentId', str(cat[2]))
+    category.text = str(cat[3], 'utf-8')
 
 offers = ET.SubElement(new, 'offers')
 
@@ -89,7 +89,7 @@ for vendor in root.findall('vendor'):
             price = ET.SubElement(offer, 'price')
             price.text = prices(good[8].text, good[0].text, good[7].text, good[5].text)
             categoryId = ET.SubElement(offer, 'categoryId')
-            categoryId.text = str(item_prom[1].decode())
+            categoryId.text = str(item_prom[1])
             picture = ET.SubElement(offer, 'picture')
             picture.text = 'http://www.erc.ua/i/goods/' + good[3].text + '.jpg'
             currencyId = ET.SubElement(offer, 'currencyId')
@@ -101,14 +101,14 @@ for vendor in root.findall('vendor'):
             name = ET.SubElement(offer, 'name')
             name.text = good[2].text
             vendor = ET.SubElement(offer, 'vendor')
-            vendor.text = vendor_name
+            vendor.text = str(erc.vendor_prom(vendor_name).decode())
             vendorCode = ET.SubElement(offer, 'vendorCode')
             vendorCode.text = good[3].text
-            country_of_origin = ET.SubElement(offer, 'country_of_origin')
+            #country_of_origin = ET.SubElement(offer, 'country_of_origin')
             if good[24].text:
+                country_of_origin = ET.SubElement(offer, 'country_of_origin')
                 country_text = erc.country_ru(good[24].text).decode()
-            else:
-                country_text = 'None'
+
             country_of_origin.text = country_text
             description = ET.SubElement(offer, 'description')
             description.text = '<![CDATA[' + str(good[26].text) + ']]>'

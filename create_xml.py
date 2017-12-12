@@ -105,7 +105,6 @@ for vendor in root.findall('vendor'):
             vendor.text = str(erc.vendor_prom(vendor_name).decode())
             vendorCode = ET.SubElement(offer, 'vendorCode')
             vendorCode.text = good[3].text
-            #country_of_origin = ET.SubElement(offer, 'country_of_origin')
             if good[24].text:
                 country_of_origin = ET.SubElement(offer, 'country_of_origin')
                 country_text = erc.country_ru(good[24].text).decode()

@@ -83,7 +83,7 @@ for vendor in root.findall('vendor'):
             if str(good[11].text) == 'Да':
                 available_text = 'true'
             else:
-                available_text = 'false'
+                available_text = ''
             offer.set('available', available_text)
             offer.set('id', good[3].text)
             offer.set('selling_type', 'r')

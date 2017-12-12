@@ -86,6 +86,7 @@ for vendor in root.findall('vendor'):
                 available_text = 'false'
             offer.set('available', available_text)
             offer.set('id', good[3].text)
+            offer.set('selling_type', 'r')
             price = ET.SubElement(offer, 'price')
             price.text = prices(good[8].text, good[0].text, good[7].text, good[5].text)
             categoryId = ET.SubElement(offer, 'categoryId')

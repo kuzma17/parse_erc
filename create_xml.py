@@ -80,7 +80,7 @@ for vendor in root.findall('vendor'):
         item_prom = erc.code_prom(good[0].text, good[1].text, vendor_name)
         if item_prom and item_prom[2] == 1 and item_prom[1]:
             offer = ET.SubElement(offers, 'offer')
-            if str(good[11].text) == 'Да':
+            if str(good[11].text) == 'Есть':
                 available_text = 'true'
             else:
                 available_text = ''

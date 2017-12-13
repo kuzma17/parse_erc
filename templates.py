@@ -180,7 +180,7 @@ def code_view(cat, title, categories, subcategories, vendors, category_id, subca
      #       print(' selected ')
      #   print('>' + str(code_prom[1]) + '</option>')
     #print('</select>')
-    print('<input type="text" name="code" id="code" value="'+str(code_code)+'">')
+    print('<input type="text" name="code_code" id="code_code" value="'+str(code_code)+'">')
     print("""</div>
                       </div>
                    <div class="form-group">

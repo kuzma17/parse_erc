@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import MySQLdb
+#import pymysql
 
 class ErcFunction:
 
@@ -222,3 +223,10 @@ class ErcFunction:
         self.__session.execute(sql)
         list = self.__session.fetchall()
         return list
+
+    def check_code(self, code):
+        sql = "SELECT * FROM erc_promcats WHERE code = %s"
+        self.__session.execute(sql, [code])
+        if self.__session.fetchone():
+            return 1
+        return 0

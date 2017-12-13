@@ -11,7 +11,7 @@ form = cgi.FieldStorage()
 category = form.getvalue('category')
 subcategory = form.getvalue('subcategory')
 vendor = form.getvalue('vendor')
-code = form.getvalue('code')
+code = form.getvalue('code_code')
 status = form.getvalue('status')
 
 

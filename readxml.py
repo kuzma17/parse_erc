@@ -19,9 +19,9 @@ download_patch = '/var/www/parse_erc/download_file/'
 
 if file_erc:
     open(download_patch + filename, 'wb').write(file_erc)
-else:
-    erc.save_xml_set(form)
-    erc.save()
+
+erc.save_xml_set(form)
+erc.save()
 
 currency = str(erc.currency())
 print('<form method="post" name="category_save" id="category_save" action="category_save.py" >')

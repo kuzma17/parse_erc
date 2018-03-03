@@ -44,7 +44,6 @@ elem = ET.parse(fileXML)
 root = elem.getroot()
 
 doc = minidom.Document()
-
 price = doc.createElement('price')
 
 doc.appendChild(price)

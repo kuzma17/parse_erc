@@ -44,8 +44,8 @@ elem = ET.parse(fileXML)
 root = elem.getroot()
 
 doc = minidom.Document()
-
 price = doc.createElement('price')
+
 doc.appendChild(price)
 price.setAttribute('date', time.strftime("%Y-%m-%d %H:%M", time.localtime()))
 

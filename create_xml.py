@@ -114,7 +114,8 @@ for vendor in root.findall('vendor'):
 
             price = doc.createElement('price')
             offer.appendChild(price)
-            text = doc.createTextNode(prices(good[8].text, good[0].text, good[7].text, good[5].text))
+            #text = doc.createTextNode(prices(good[8].text, good[0].text, good[7].text, good[5].text))
+            text = doc.createTextNode(good[5].text)
             price.appendChild(text)
 
             categoryId = doc.createElement('categoryId')

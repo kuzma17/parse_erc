@@ -160,8 +160,10 @@ for vendor in root.findall('vendor'):
 
             country_of_origin = doc.createElement('country_of_origin')
             offer.appendChild(country_of_origin)
-            if good[24].text:
-                text = doc.createTextNode(erc.country_ru(good[24].text).decode())
+            #if good[24].text:
+            if good[25].text:
+                #text = doc.createTextNode(erc.country_ru(good[24].text).decode())
+                text = doc.createTextNode(erc.country_ru(good[25].text).decode())
                 country_of_origin.appendChild(text)
 
             description = doc.createElement('description')

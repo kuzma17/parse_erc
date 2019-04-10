@@ -104,7 +104,7 @@ for vendor in root.findall('vendor'):
         if item_prom and item_prom[2] == 1 and item_prom[1]:
             offer = doc.createElement('offer')
             offers.appendChild(offer)
-            if str(good[11].text) == 'Есть':
+            if str(good[12].text) == 'Есть':
                 available_text = 'true'
             else:
                 available_text = ''
